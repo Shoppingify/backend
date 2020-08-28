@@ -98,12 +98,18 @@ exports.login = async (ctx) => {
     }
     // Compare password
   } catch (e) {
+    console.log(`Error`, e);
     if (e instanceof ValidationError) {
       ctx.status = 422;
       ctx.body = {
         status: "error",
         field: e.details[0].path[0],
         message: e.details[0].message,
+      };
+    } else {
+      ctx.body = {
+        status: "error",
+        message: "An error occured",
       };
     }
   }

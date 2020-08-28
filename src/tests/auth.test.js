@@ -1,14 +1,5 @@
-process.env.NODE_ENV = "test";
-
-const chai = require("chai");
-const should = chai.should();
-const chaiHttp = require("chai-http");
-const bcrypt = require("bcryptjs");
-
-chai.use(chaiHttp);
-
-const server = require("../server");
-const knex = require("../db/connection");
+const { chai, should, server, knex } = require("./setup");
+const { createUser } = require("./utils/utils");
 
 const userData = {
   email: "admin@test.fr",
@@ -48,7 +39,7 @@ describe("User authentication", () => {
   });
 
   it("should not register an user with an email already existing", (done) => {
-    createUser("admin@test.fr", "password").then(() => {
+    createUser("admin@test.fr", "password").then((val) => {
       chai
         .request(server)
         .post("/api/register")
@@ -125,11 +116,3 @@ describe("User authentication", () => {
       });
   });
 });
-
-const createUser = (email, password) => {
-  const hash = bcrypt.hashSync(password, 10);
-  return knex("users").insert({
-    email,
-    password: hash,
-  });
-};

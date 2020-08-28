@@ -7,6 +7,7 @@ const middleware = async function jwt(ctx, next) {
     //Try and decode the token asynchronously
     const decoded = await jsonwebtoken.verify(token, process.env.JWT_SECRET);
 
+    console.log(`Decoded`, decoded);
     //If it worked set the ctx.state.user parameter to the decoded token.
     ctx.state.user = decoded.data;
   } catch (error) {

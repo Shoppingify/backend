@@ -1,10 +1,10 @@
-require("dotenv-flow").config();
+require("dotenv").config();
 const Koa = require("koa");
 const Router = require("@koa/router");
 const cors = require("@koa/cors");
 const bodyParser = require("koa-bodyparser");
 const authRoutes = require("./routes/auth");
-
+const listsRoutes = require("./routes/lists");
 const app = new Koa();
 const router = new Router({ prefix: "/api" });
 
@@ -20,6 +20,8 @@ app.use(bodyParser());
 //   ctx.body = { message: "Hello World" };
 // });
 router.use(authRoutes.routes());
+router.use(listsRoutes.routes());
+
 app.use(router.routes());
 app.use(router.allowedMethods());
 
