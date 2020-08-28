@@ -1,6 +1,10 @@
 // Update with your config settings.
 const path = require("path");
-require("dotenv").config();
+require("dotenv").config({
+  path: path.join(__dirname, `.env.${process.env.NODE_ENV.trim()}`),
+});
+console.log(`Process env`, process.env.NODE_ENV);
+console.log(`Process env`, process.env.JWT_SECRET);
 
 module.exports = {
   development: {

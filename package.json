@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "build": "node src/server.js",
-    "test": "mocha ./src/tests/**/*.test.js --exit"
+    "dev": "SET NODE_ENV=development & nodemon src/server.js",
+    "build": "SET NODE_ENV=production & node src/server.js",
+    "test": "SET NODE_ENV=test & mocha ./src/tests/**/*.test.js --exit"
   },
   "repository": {
     "type": "git",
