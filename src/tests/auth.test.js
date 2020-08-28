@@ -14,7 +14,7 @@ describe("User authentication", () => {
         return knex.migrate.latest();
       })
       .then(() => {
-        return knex.seed.run();
+        // return knex.seed.run();
       });
   });
 
@@ -22,7 +22,7 @@ describe("User authentication", () => {
     return knex.migrate.rollback();
   });
 
-  it("should register an user", (done) => {
+  it("should register a user", (done) => {
     chai
       .request(server)
       .post("/api/register")
@@ -38,7 +38,7 @@ describe("User authentication", () => {
       });
   });
 
-  it("should not register an user with an email already existing", (done) => {
+  it("should not register a user with an email already existing", (done) => {
     createUser("admin@test.fr", "password").then((val) => {
       chai
         .request(server)
@@ -52,7 +52,7 @@ describe("User authentication", () => {
     });
   });
 
-  it("should not register an user with invalid data", (done) => {
+  it("should not register a user with invalid data", (done) => {
     chai
       .request(server)
       .post("/api/register")
@@ -81,7 +81,7 @@ describe("User authentication", () => {
     });
   });
 
-  it("should not logged in an user with invalid credentials", (done) => {
+  it("should not logged in a user with invalid credentials", (done) => {
     createUser("admin@test.fr", "password").then(() => {
       chai
         .request(server)

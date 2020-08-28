@@ -4,10 +4,7 @@ exports.up = function (knex) {
     table.string("name").notNullable();
     table.integer("user_id").unsigned().notNullable();
     table
-      .enu("status", ["active", "completed", "canceled"], {
-        useNative: true,
-        enumName: "list_status",
-      })
+      .enu("status", ["active", "completed", "canceled"])
       .defaultTo("active");
     table.timestamp("created_at").defaultTo(knex.fn.now());
     table.timestamp("updated_at").defaultTo(knex.fn.now());

@@ -5,5 +5,6 @@ const jwt = require("../middlewares/jwt");
 const router = new Router();
 
 router.get("/lists", jwt, listsController.index);
+router.post("/lists", jwt, listsController.create);
 
 module.exports = router;

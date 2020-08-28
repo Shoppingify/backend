@@ -3,6 +3,7 @@ const { ValidationError } = require("@hapi/joi");
 const bcrypt = require("bcryptjs");
 const knex = require("../db/connection");
 const jsonwebtoken = require("jsonwebtoken");
+const { formatValidationErrors } = require("../utils/formatValidationErrors");
 
 const authSchema = Joi.object().keys({
   email: Joi.string().email().required(),
@@ -30,11 +31,7 @@ exports.register = async (ctx) => {
     console.log(`E`, e);
     if (e instanceof ValidationError) {
       ctx.status = 422;
-      ctx.body = {
-        status: "error",
-        field: e.details[0].path[0],
-        message: e.details[0].message,
-      };
+      ctx.body = formatValidationErrors(e);
     } else if (e.code === "23505") {
       ctx.status = 422;
       ctx.body = {
@@ -101,11 +98,7 @@ exports.login = async (ctx) => {
     console.log(`Error`, e);
     if (e instanceof ValidationError) {
       ctx.status = 422;
-      ctx.body = {
-        status: "error",
-        field: e.details[0].path[0],
-        message: e.details[0].message,
-      };
+      ctx.body = formatValidationErrors(e);
     } else {
       ctx.body = {
         status: "error",

@@ -1,25 +1,48 @@
 const { isOwner } = require("../utils/isOwner");
+const knex = require("../db/connection");
+const Joi = require("@hapi/joi");
+const { ValidationError } = require("@hapi/joi");
+const { formatValidationErrors } = require("../utils/formatValidationErrors");
+
+const createSchema = Joi.object().keys({
+  name: Joi.string().min(3).required(),
+});
 
 exports.index = async (ctx) => {
-  console.log(`ctx params`, ctx.params.userId);
-  console.log(`ctx state user`, ctx.state.user.id);
+  // Fetch the lists
+  const lists = await knex("lists")
+    .where({
+      user_id: ctx.state.user.id,
+    })
+    .select("*");
 
-  console.log(`isOwnerTest`, await isOwner("users", { id: ctx.state.user.id }));
+  ctx.status = 200;
+  ctx.body = {
+    status: "success",
+    data: lists,
+  };
+};
 
-  // if (!isOwner("lists", "user_id", ctx.state.user.id)) {
-  //   ctx.status = 403;
-  //   ctx.body = {
-  //     status: "error",
-  //     message: "Access forbidden",
-  //   };
-  // }
-  if (ctx.state.user.id !== parseInt(ctx.params.userId, 10)) {
-    ctx.status = 403;
+exports.create = async (ctx) => {
+  try {
+    const data = await createSchema.validateAsync(ctx.request.body);
+
+    const { name } = ctx.request.body;
+
+    const list = await knex("lists").returning("*").insert({
+      name,
+      user_id: ctx.state.user.id,
+    });
+    ctx.status = 201;
     ctx.body = {
-      status: "error",
-      message: "Access forbidden",
+      status: "success",
+      data: list[0],
     };
-  } else {
-    ctx.body = [];
+  } catch (e) {
+    if (e instanceof ValidationError) {
+      ctx.status = 422;
+      ctx.body = formatValidationErrors(e);
+    }
+    console.log(`Error`, e);
   }
 };
