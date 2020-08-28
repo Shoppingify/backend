@@ -13,6 +13,5 @@
 - /api/lists [POST] -> create a list
 
 1 - Run npm install
-2 - Add .env variables
-3 - Run "npm run dev" to start the development server
-4 - Run "npm run test" to start the tests
+2 - Add .env variables [Check in the discord]
+3 - Run "npm run build" or "npm run dev-remote" to use the remote db
