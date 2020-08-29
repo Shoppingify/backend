@@ -18,11 +18,14 @@ exports.createList = (user, name) => {
   });
 };
 
-exports.generateJWT = (userData) => {
-  console.log(`userData`, userData);
+exports.generateJWT = (user) => {
+  console.log(`user`, user);
   return jsonwebtoken.sign(
     {
-      data: userData,
+      data: {
+        id: user.id,
+        email: user.email,
+      },
     },
     process.env.JWT_SECRET,
     { expiresIn: 60 * 60 * 24 * 7 } // 7 days

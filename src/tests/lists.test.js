@@ -1,6 +1,5 @@
 const { chai, should, server, knex, chaiHttp } = require("./setup");
 const { createUser, generateJWT, createList } = require("./utils/utils");
-const { restart } = require("nodemon");
 
 describe("Lists routes test", () => {
   beforeEach(() => {
@@ -34,10 +33,7 @@ describe("Lists routes test", () => {
     const user2 = createUser("other@test.fr", "password");
     Promise.all([user1, user2])
       .then((users) => {
-        const jwt = generateJWT({
-          id: users[0][0].id,
-          email: users[0][0].email,
-        });
+        const jwt = generateJWT(users[0][0]);
         chai
           .request(server)
           .get(`/api/lists`)
@@ -70,10 +66,7 @@ describe("Lists routes test", () => {
       chai
         .request(server)
         .post("/api/lists")
-        .set(
-          "Authorization",
-          "Bearer " + generateJWT({ id: user[0].id, email: user[0].email })
-        )
+        .set("Authorization", "Bearer " + generateJWT(user[0]))
         .send({ name: "first" })
         .end((err, res) => {
           console.log(`Res body`, res.body);
@@ -97,10 +90,7 @@ describe("Lists routes test", () => {
       chai
         .request(server)
         .post("/api/lists")
-        .set(
-          "Authorization",
-          "Bearer " + generateJWT({ id: user[0].id, email: user[0].email })
-        )
+        .set("Authorization", "Bearer " + generateJWT(user[0]))
         .send({})
         .end((err, res) => {
           should.not.exist(err);
@@ -119,10 +109,7 @@ describe("Lists routes test", () => {
         chai
           .request(server)
           .put(`/api/lists/${list[0].id}`)
-          .set(
-            "Authorization",
-            "Bearer " + generateJWT({ id: user[0].id, email: user[0].email })
-          )
+          .set("Authorization", "Bearer " + generateJWT(user[0]))
           .send({
             name: "updated",
           })
@@ -143,10 +130,7 @@ describe("Lists routes test", () => {
     Promise.all([user1, user2]).then((users) => {
       const admin = users[0][0];
       const other = users[1][0];
-      const jwt = generateJWT({
-        id: other.id,
-        email: other.email,
-      });
+      const jwt = generateJWT(other);
       try {
         createList(admin, "first").then((list) => {
           chai
@@ -172,10 +156,7 @@ describe("Lists routes test", () => {
         chai
           .request(server)
           .get(`/api/lists/${list[0].id}`)
-          .set(
-            "Authorization",
-            "Bearer " + generateJWT({ id: user[0].id, email: user[0].email })
-          )
+          .set("Authorization", "Bearer " + generateJWT(user[0]))
           .end((err, res) => {
             should.not.exist(err);
             res.status.should.equal(200);
@@ -199,10 +180,7 @@ describe("Lists routes test", () => {
         chai
           .request(server)
           .delete(`/api/lists/${list[0].id}`)
-          .set(
-            "Authorization",
-            "Bearer " + generateJWT({ id: user[0].id, email: user[0].email })
-          )
+          .set("Authorization", "Bearer " + generateJWT(user[0]))
           .end((err, res) => {
             should.not.exist(err);
             res.status.should.equal(204);
