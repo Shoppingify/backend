@@ -192,4 +192,29 @@ describe("Lists routes test", () => {
       });
     });
   });
+
+  it("should delete a list", (done) => {
+    createUser("admin@test.fr", "password").then((user) => {
+      createList(user[0], "first").then((list) => {
+        chai
+          .request(server)
+          .delete(`/api/lists/${list[0].id}`)
+          .set(
+            "Authorization",
+            "Bearer " + generateJWT({ id: user[0].id, email: user[0].email })
+          )
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.equal(204);
+
+            knex("lists")
+              .where({ id: list[0].id })
+              .then((list) => {
+                list.length.should.equal(0);
+                done();
+              });
+          });
+      });
+    });
+  });
 });

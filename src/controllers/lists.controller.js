@@ -147,3 +147,31 @@ exports.update = async (ctx) => {
     console.log(`Error`, e);
   }
 };
+
+// Delete a list
+exports.delete = async (ctx) => {
+  try {
+    const list = await knex("lists").where({
+      id: parseInt(ctx.params.id, 10),
+      user_id: ctx.state.user.id,
+    });
+
+    if (list.length !== 1) {
+      ctx.status = 404;
+      ctx.body = {
+        status: "error",
+        message: "List not found",
+      };
+    }
+
+    await knex("lists").where({ id: list[0].id }).del();
+    ctx.status = 204;
+  } catch (e) {
+    console.log(`Error`, e);
+    ctx.status = e.status || 500;
+    ctx.body = {
+      status: "error",
+      message: "An error occured",
+    };
+  }
+};

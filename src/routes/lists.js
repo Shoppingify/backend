@@ -8,5 +8,6 @@ router.get("/lists", jwt, listsController.index);
 router.get("/lists/:id", jwt, listsController.show);
 router.post("/lists", jwt, listsController.create);
 router.put("/lists/:id", jwt, listsController.update);
+router.delete("/lists/:id", jwt, listsController.delete);
 
 module.exports = router;
