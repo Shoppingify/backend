@@ -74,6 +74,7 @@ exports.login = async (ctx) => {
           status: "error",
           message: "Invalid credentials",
         };
+        return ctx;
       } else {
         // Everything is good I can generate the jwt
         const userData = {

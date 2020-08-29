@@ -1,0 +1,13 @@
+get:
+  summary: "Fetch all the connected user lists"
+  tags:
+    - lists
+post:
+  summary: "Create a list for the connected user"
+  tags:
+    - lists
+  description: "This endpoint allows user to create a list"
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"

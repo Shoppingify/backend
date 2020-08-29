@@ -10,6 +10,14 @@ exports.createUser = (email, password) => {
   });
 };
 
+exports.createList = (user, name) => {
+  console.log("UserId", user.id);
+  return knex("lists").returning(["id", "name"]).insert({
+    name,
+    user_id: user.id,
+  });
+};
+
 exports.generateJWT = (userData) => {
   console.log(`userData`, userData);
   return jsonwebtoken.sign(

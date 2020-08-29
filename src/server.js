@@ -39,7 +39,9 @@ app.use(async (ctx, next) => {
   }
 });
 
-app.on("error", (err, ctx) => {});
+app.on("error", (err, ctx) => {
+  console.log(`Error handler`, err);
+});
 
 app.use(
   cors({

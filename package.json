@@ -7,7 +7,8 @@
     "dev": "SET NODE_ENV=development & nodemon src/server.js",
     "dev-remote": "SET NODE_ENV=production & nodemon src/server.js",
     "build": "SET NODE_ENV=production & node src/server.js",
-    "test": "SET NODE_ENV=test & mocha ./src/tests/**/*.test.js --exit"
+    "test": "SET NODE_ENV=test & mocha ./src/tests/**/*.test.js --exit",
+    "mocha": "SET NODE_ENV=test & mocha --exit"
   },
   "repository": {
     "type": "git",

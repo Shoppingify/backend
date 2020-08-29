@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
-  title: "Swagger Example"
+  title: "Shoppingify"
   description: >
-    This is an example Koa API that provides two endpoints - a health check and a login.
+    Api documentation for the Shoppingify api.
   version: "1.0.0"
 host: "localhost:3000/api"
 schemes:
@@ -75,6 +75,43 @@ paths:
       summary: "Create a list for the connected user"
       tags:
         - lists
+      description: "This endpoint allows user to create a list"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            type: "object"
+            required:
+              - name
+            properties:
+              name:
+                type: string
+                example: "List name"
+
+  /lists/{id}:
+    get:
+      summary: "Get a single list"
+      tags:
+        - lists
+      description: "This endpoint allows user to get a list"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+    put:
+      summary: "Update a list"
+      tags:
+        - lists
+      description: "This endpoint allows user to update a list"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+
 responses:
   400:
     description: Bad Request
