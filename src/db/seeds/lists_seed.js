@@ -26,7 +26,7 @@ exports.seed = function (knex) {
       return knex("users")
         .pluck("id")
         .then((userIds) => {
-          console.log(`Usersids`, userIds);
+          // console.log(`Usersids`, userIds);
           let lists = [];
 
           userIds.forEach((id) => {
@@ -35,7 +35,7 @@ exports.seed = function (knex) {
                 name: faker.lorem.word(),
                 user_id: id,
               };
-              console.log(`list`, list);
+              // console.log(`list`, list);
               lists.push(list);
             }
           });

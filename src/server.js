@@ -13,6 +13,7 @@ const cors = require("@koa/cors");
 const bodyParser = require("koa-bodyparser");
 const authRoutes = require("./routes/auth");
 const listsRoutes = require("./routes/lists");
+const itemsRoutes = require("./routes/items");
 const app = new Koa();
 const router = new Router({ prefix: "/api" });
 
@@ -52,8 +53,10 @@ app.use(
 
 app.use(bodyParser());
 
+// Api routes
 router.use(authRoutes.routes());
 router.use(listsRoutes.routes());
+router.use(itemsRoutes.routes());
 
 app.use(ui(swaggerDocument, "/swagger"));
 app.use(router.routes());
