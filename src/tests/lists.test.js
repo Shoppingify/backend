@@ -1,5 +1,6 @@
 const { chai, should, server, knex, chaiHttp } = require("./setup");
-const { createUser, generateJWT } = require("./utils/utils");
+const { createUser, generateJWT, createList } = require("./utils/utils");
+const { restart } = require("nodemon");
 
 describe("Lists routes test", () => {
   beforeEach(() => {
@@ -109,6 +110,86 @@ describe("Lists routes test", () => {
 
           done();
         });
+    });
+  });
+
+  it("should update a user's list name", (done) => {
+    createUser("admin@test.fr", "password").then((user) => {
+      createList(user[0], "first").then((list) => {
+        chai
+          .request(server)
+          .put(`/api/lists/${list[0].id}`)
+          .set(
+            "Authorization",
+            "Bearer " + generateJWT({ id: user[0].id, email: user[0].email })
+          )
+          .send({
+            name: "updated",
+          })
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.equal(200);
+            res.body.status.should.equal("success");
+            res.body.data.name.should.equal("updated");
+            done();
+          });
+      });
+    });
+  });
+
+  it("should not update a list which not belong to its user", (done) => {
+    const user1 = createUser("admin@test.fr", "password");
+    const user2 = createUser("other@test.fr", "password");
+    Promise.all([user1, user2]).then((users) => {
+      const admin = users[0][0];
+      const other = users[1][0];
+      const jwt = generateJWT({
+        id: other.id,
+        email: other.email,
+      });
+      try {
+        createList(admin, "first").then((list) => {
+          chai
+            .request(server)
+            .put(`/api/lists/${list[0].id}`)
+            .set("Authorization", `Bearer ${jwt}`)
+            .end((err, res) => {
+              should.not.exist(err);
+              // it should not found the list
+              res.status.should.equal(404);
+              done();
+            });
+        });
+      } catch (e) {
+        console.log(`Error `, e);
+      }
+    });
+  });
+
+  it("should get a list", (done) => {
+    createUser("admin@test.fr", "password").then((user) => {
+      createList(user[0], "first").then((list) => {
+        chai
+          .request(server)
+          .get(`/api/lists/${list[0].id}`)
+          .set(
+            "Authorization",
+            "Bearer " + generateJWT({ id: user[0].id, email: user[0].email })
+          )
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.equal(200);
+            res.body.data.name.should.equal("first");
+            res.body.status.should.equal("success");
+            res.body.data.should.include.keys(
+              "id",
+              "name",
+              "user_id",
+              "status"
+            );
+            done();
+          });
+      });
     });
   });
 });

@@ -1,0 +1,57 @@
+/login:
+    post:
+      summary: "Authenticate an user"
+      tags:
+        - auth
+      description: "This endpoint allows users to generate a token so they can login"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Email and password to authenticate"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginRequest"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        401:
+          $ref: "#/responses/401"
+        422:
+          $ref: "#/responses/422"
+        500:
+          $ref: "#/responses/500"
+
+  /register:
+    post:
+      summary: "Register a user"
+      tags:
+        - auth
+      description: "This endpoint allows users to register"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Email and password to authenticate"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginRequest"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        401:
+          $ref: "#/responses/401"
+        422:
+          $ref: "#/responses/422"
+        500:
+          $ref: "#/responses/500"
