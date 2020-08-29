@@ -3,3 +3,4 @@ node_modules
 .env.development
 .env.production
 .env.test
+logs/access.log

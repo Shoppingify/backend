@@ -10,22 +10,30 @@ const createSchema = Joi.object().keys({
 
 exports.index = async (ctx) => {
   // Fetch the lists
-  const lists = await knex("lists")
-    .where({
-      user_id: ctx.state.user.id,
-    })
-    .select("*");
+  try {
+    const lists = await knex("lists")
+      .where({
+        user_id: ctx.state.user.id,
+      })
+      .select("*");
 
-  ctx.status = 200;
-  ctx.body = {
-    status: "success",
-    data: lists,
-  };
+    ctx.status = 200;
+    ctx.body = {
+      status: "success",
+      data: lists,
+    };
+  } catch (e) {
+    ctx.status = e.status || 500;
+    ctx.body = {
+      status: "error",
+      message: "An error occured",
+    };
+  }
 };
 
 exports.create = async (ctx) => {
   try {
-    const data = await createSchema.validateAsync(ctx.request.body);
+    await createSchema.validateAsync(ctx.request.body);
 
     const { name } = ctx.request.body;
 
@@ -42,6 +50,12 @@ exports.create = async (ctx) => {
     if (e instanceof ValidationError) {
       ctx.status = 422;
       ctx.body = formatValidationErrors(e);
+    } else {
+      ctx.status = e.status || 500;
+      ctx.body = {
+        status: "error",
+        message: "An error occured",
+      };
     }
     console.log(`Error`, e);
   }

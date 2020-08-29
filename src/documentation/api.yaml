@@ -1,0 +1,145 @@
+swagger: "2.0"
+info:
+  title: "Swagger Example"
+  description: >
+    This is an example Koa API that provides two endpoints - a health check and a login.
+  version: "1.0.0"
+host: "localhost:3000/api"
+schemes:
+  - "http"
+paths:
+  /login:
+    post:
+      summary: "Authenticate an user"
+      tags:
+        - auth
+      description: "This endpoint allows users to generate a token so they can login"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Email and password to authenticate"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginRequest"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        401:
+          $ref: "#/responses/401"
+        422:
+          $ref: "#/responses/422"
+        500:
+          $ref: "#/responses/500"
+
+  /register:
+    post:
+      summary: "Register a user"
+      tags:
+        - auth
+      description: "This endpoint allows users to register"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Email and password to authenticate"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginRequest"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        401:
+          $ref: "#/responses/401"
+        422:
+          $ref: "#/responses/422"
+        500:
+          $ref: "#/responses/500"
+
+  /lists:
+    get:
+      summary: "Fetch all the connected user lists"
+      tags:
+        - lists
+    post:
+      summary: "Create a list for the connected user"
+      tags:
+        - lists
+responses:
+  400:
+    description: Bad Request
+    schema:
+      $ref: "#/definitions/Error"
+  401:
+    description: Unauthorized
+    schema:
+      $ref: "#/definitions/Error"
+  422:
+    description: Validation Error
+    schema:
+      $ref: "#/definitions/ValidationError"
+  500:
+    description: Internal Server Error
+    schema:
+      $ref: "#/definitions/Error"
+
+definitions:
+  LoginRequest:
+    type: "object"
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: "string"
+        example: "username@email.com"
+      password:
+        type: "string"
+        example: "secret"
+
+  LoginResponse:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+      data:
+        type: "object"
+        properties:
+          user:
+            type: "object"
+            example:
+              id: 1
+              email: "email@example.com"
+          token:
+            type: "string"
+            example: "dfjghjk34h5kjhdfkjdfgklj76l8k"
+
+  Error:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        example: "error"
+      message:
+        type: "string"
+
+  ValidationError:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        example: "error"
+      field:
+        type: "string"
+      message:
+        type: "string"

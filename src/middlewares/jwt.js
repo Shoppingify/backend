@@ -15,12 +15,14 @@ const middleware = async function jwt(ctx, next) {
     if (error.name === "TokenExpiredError") {
       ctx.status = 401;
       ctx.body = {
+        status: "error",
         message: "Token expired",
       };
       return ctx;
     } else {
       ctx.status = 401;
       ctx.body = {
+        status: "error",
         message: "Invalid token",
       };
       return ctx;
@@ -47,6 +49,7 @@ function getJwtToken(ctx) {
   }
   ctx.status = 401;
   ctx.body = {
+    status: "error",
     message: "Unauthorized",
   };
   return ctx;

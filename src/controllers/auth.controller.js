@@ -22,10 +22,21 @@ exports.register = async (ctx) => {
       })
       .returning(["id", "email"]);
 
+    const token = jsonwebtoken.sign(
+      {
+        data: user[0],
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" } // 7 days
+    );
+
     ctx.status = 201;
     ctx.body = {
       status: "success",
-      data: user[0],
+      data: {
+        token: token,
+        user: user[0],
+      },
     };
   } catch (e) {
     console.log(`E`, e);
@@ -74,7 +85,7 @@ exports.login = async (ctx) => {
             data: userData,
           },
           process.env.JWT_SECRET,
-          { expiresIn: 60 * 60 * 24 * 7 } // 7 days
+          { expiresIn: "7d" } // 7 days
           // { expiresIn: 60 }
         );
         ctx.status = 200;
@@ -93,13 +104,13 @@ exports.login = async (ctx) => {
         message: "Invalid credentials",
       };
     }
-    // Compare password
   } catch (e) {
     console.log(`Error`, e);
     if (e instanceof ValidationError) {
       ctx.status = 422;
       ctx.body = formatValidationErrors(e);
     } else {
+      ctx.status = e.status || 500;
       ctx.body = {
         status: "error",
         message: "An error occured",

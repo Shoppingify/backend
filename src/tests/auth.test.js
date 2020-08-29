@@ -32,8 +32,8 @@ describe("User authentication", () => {
 
         res.status.should.equal(201);
         res.body.status.should.equal("success");
-        console.log(`res.body`, res.body.data);
-        res.body.data.email.should.equal(userData.email);
+        // console.log(`res.body`, res.body.data);
+        res.body.data.user.email.should.equal(userData.email);
         done();
       });
   });
