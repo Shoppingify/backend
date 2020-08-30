@@ -136,6 +136,7 @@ describe("Lists routes test", () => {
           chai
             .request(server)
             .put(`/api/lists/${list[0].id}`)
+            .send({ name: "machin" })
             .set("Authorization", `Bearer ${jwt}`)
             .end((err, res) => {
               should.not.exist(err);

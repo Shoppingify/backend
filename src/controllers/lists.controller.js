@@ -5,11 +5,11 @@ const { ValidationError } = require("@hapi/joi");
 const { formatValidationErrors } = require("../utils/formatValidationErrors");
 
 const listSchema = Joi.object().keys({
-  name: Joi.string().min(3).required(),
+  name: Joi.string().min(3).trim().required(),
 });
 
 const listUpdateSchema = Joi.object().keys({
-  name: Joi.string().min(3).required(),
+  name: Joi.string().min(3).trim(),
   status: Joi.string().valid("active", "completed", "canceled"),
 });
 
@@ -98,6 +98,15 @@ exports.create = async (ctx) => {
 };
 
 exports.update = async (ctx) => {
+  const { name, status } = ctx.request.body;
+  if (!name && !status) {
+    ctx.status = 400;
+    ctx.body = {
+      status: "error",
+      message: "Name or status are missing",
+    };
+    return ctx;
+  }
   try {
     // Fetch the list
     const list = await knex("lists").where({
@@ -114,8 +123,6 @@ exports.update = async (ctx) => {
       return ctx;
     }
     await listUpdateSchema.validateAsync(ctx.request.body);
-
-    const { name, status } = ctx.request.body;
 
     const updatedList = await knex("lists")
       .where({ id: list[0].id })
