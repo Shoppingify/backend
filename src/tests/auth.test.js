@@ -1,5 +1,5 @@
 const { chai, should, server, knex } = require("./setup");
-const { createUser } = require("./utils/utils");
+const { createUser, generateJWT } = require("./utils/utils");
 
 const userData = {
   email: "admin@test.fr",
@@ -114,5 +114,26 @@ describe("User authentication", () => {
         res.body.message.should.equal('"password" is required');
         done();
       });
+  });
+
+  it("should fetch the user's informations", (done) => {
+    createUser("admin@test.fr", "password").then((user) => {
+      chai
+        .request(server)
+        .get("/api/me")
+        .set("Authorization", "Bearer " + generateJWT(user[0]))
+        .end((err, res) => {
+          should.not.exist(err);
+          res.status.should.equal(200);
+          res.body.data.should.include.keys(
+            "id",
+            "email",
+            "created_at",
+            "updated_at"
+          );
+          res.body.data.should.not.include.keys("password");
+          done();
+        });
+    });
   });
 });
