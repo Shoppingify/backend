@@ -60,6 +60,7 @@ exports.register = async (ctx) => {
   }
 };
 
+// Login a user
 exports.login = async (ctx) => {
   try {
     // Validate data
@@ -117,5 +118,37 @@ exports.login = async (ctx) => {
         message: "An error occured",
       };
     }
+  }
+};
+
+// Fetch the user's informations
+exports.me = async (ctx) => {
+  try {
+    const user = await knex("users")
+      .where({ id: ctx.state.user.id })
+      .select(["id", "email", "created_at", "updated_at"]);
+
+    console.log(`User`, user);
+    if (user.length !== 1) {
+      ctx.status = 404;
+      ctx.body = {
+        status: "error",
+        message: "User not found",
+      };
+      return ctx;
+    }
+
+    ctx.status = 200;
+    ctx.body = {
+      status: "success",
+      data: user[0],
+    };
+  } catch (e) {
+    console.log(`E`, e);
+    ctx.status = e.status || 500;
+    ctx.body = {
+      status: "error",
+      message: "An error occured",
+    };
   }
 };
