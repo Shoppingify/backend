@@ -5,6 +5,7 @@ info:
     Api documentation for the Shoppingify api.
   version: "1.0.0"
 host: "localhost:3000/api"
+basePath: "/"
 schemes:
   - "http"
 paths:
@@ -91,6 +92,15 @@ paths:
               name:
                 type: string
                 example: "List name"
+      responses:
+        201:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ListResponse"
+        401:
+          $ref: "#/responses/401"
+        422:
+          $ref: "#/responses/422"
 
   /lists/{id}:
     get:
@@ -102,6 +112,16 @@ paths:
         - "application/json"
       produces:
         - "application/json"
+      responses:
+        201:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ListResponse"
+        401:
+          $ref: "#/responses/401"
+        404:
+          $ref: "#/responses/404"
+
     put:
       summary: "Update a list"
       tags:
@@ -111,6 +131,134 @@ paths:
         - "application/json"
       produces:
         - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            type: "object"
+            properties:
+              name:
+                type: "string"
+                example: "List name"
+              status:
+                type: "string"
+                example: "active | completed | canceled"
+      responses:
+        201:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ListResponse"
+        401:
+          $ref: "#/responses/401"
+        422:
+          $ref: "#/responses/422"
+
+    delete:
+      summary: "Delete a user's list"
+      tags:
+        - lists
+      description: "This endpoint allows user to delete an list"
+      responses:
+        204:
+          description: "Success"
+        401:
+          $ref: "#/responses/401"
+        404:
+          description: "Error"
+          schema:
+            $ref: "#/definitions/Error"
+
+  # ITEMS
+  /items:
+    get:
+      summary: "Fetch items grouped by categories"
+      tags:
+        - items
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                example: "success"
+              data:
+                type: "array"
+                items:
+                  category: "string"
+
+    post:
+      summary: "Create an item"
+      tags:
+        - items
+      description: "This endpoint allows user to create an item"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            $ref: "#/definitions/ItemPostRequest"
+      responses:
+        201:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ItemResponse"
+        401:
+          $ref: "#/responses/401"
+        422:
+          $ref: "#/responses/422"
+
+  /items/id:
+    put:
+      summary: "Update an item"
+      tags:
+        - items
+      description: "This endpoint allows user to update an item"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            $ref: "#/definitions/ItemPutRequest"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ItemResponse"
+        401:
+          $ref: "#/responses/401"
+        404:
+          description: "Error"
+          schema:
+            $ref: "#/definitions/Error"
+        422:
+          $ref: "#/responses/422"
+
+    delete:
+      summary: "Delete an item"
+      tags:
+        - items
+      description: "This endpoint allows user to delete an item"
+      responses:
+        204:
+          description: "Success"
+        401:
+          $ref: "#/responses/401"
+        404:
+          description: "Error"
+          schema:
+            $ref: "#/definitions/Error"
 
 responses:
   400:
@@ -160,6 +308,77 @@ definitions:
           token:
             type: "string"
             example: "dfjghjk34h5kjhdfkjdfgklj76l8k"
+
+  ListResponse:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      status:
+        type: "string"
+      user_id:
+        type: "integer"
+      created_at:
+        type: "string"
+      updated_at:
+        type: "string"
+
+  ItemPostRequest:
+    type: "object"
+    required:
+      - name
+      - category
+    properties:
+      name:
+        type: "string"
+        example: "Item name"
+      category:
+        type: "string"
+        example: "Category1"
+      note:
+        type: "string"
+        example: "Great description"
+      image:
+        type: "string"
+        example: "https://image.com"
+
+  ItemPutRequest:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Item name"
+      category:
+        type: "string"
+        example: "Category1"
+      note:
+        type: "string"
+        example: "Great description"
+      image:
+        type: "string"
+        example: "https://image.com"
+
+  ItemResponse:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      category_id:
+        type: "integer"
+      user_id:
+        type: "integer"
+      note:
+        type: "string"
+      image:
+        type: "string"
+      created_at:
+        type: "string"
+      updated_at:
+        type: "string"
 
   Error:
     type: "object"
