@@ -4,8 +4,6 @@ const env = process.env.NODE_ENV ? process.env.NODE_ENV.trim() : "development";
 require("dotenv").config({
   path: path.join(__dirname, `.env.${env}`),
 });
-console.log(`Process env`, process.env.NODE_ENV);
-console.log(`Process env`, process.env.JWT_SECRET);
 
 module.exports = {
   development: {
