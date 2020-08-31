@@ -72,7 +72,7 @@ describe("Lists routes test", () => {
           console.log(`Res body`, res.body);
           should.not.exist(err);
           res.status.should.equal(201);
-          res.body.data.name.should.equal("first");
+          res.body.data.list.name.should.equal("first");
 
           knex("lists")
             .where({ user_id: user.id })
@@ -117,7 +117,7 @@ describe("Lists routes test", () => {
             should.not.exist(err);
             res.status.should.equal(200);
             res.body.status.should.equal("success");
-            res.body.data.name.should.equal("updated");
+            res.body.data.list.name.should.equal("updated");
             done();
           });
       });
