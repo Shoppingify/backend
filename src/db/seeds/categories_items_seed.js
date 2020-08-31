@@ -1,4 +1,5 @@
 const faker = require("faker");
+const { mtRand } = require("../../utils/mtRand");
 
 exports.seed = async function (knex) {
   await knex("categories").del();
@@ -14,7 +15,7 @@ exports.seed = async function (knex) {
   const users = await knex("users").pluck("id");
   let categories = [];
   users.forEach((userId) => {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < mtRand(3, 5); i++) {
       const category = {
         name: faker.random.word(),
         user_id: userId,
@@ -26,77 +27,27 @@ exports.seed = async function (knex) {
 
   const categoriesIds = await knex("categories").pluck("id");
 
-  let items = [];
-  categoriesIds.forEach((catId) => {
-    for (let i = 0; i < 3; i++) {
-      const item = {
-        name: faker.random.word(),
-        note: faker.random.words(5),
-        image: faker.image.imageUrl(),
-        category_id: catId,
-        user_id: faker.random.arrayElement(users),
-      };
+  const usersIds = await knex("users").pluck("id");
 
-      items.push(item);
-      // console.log(`Items`, items);
-    }
+  let items = [];
+  usersIds.forEach((userId) => {
+    categoriesIds.forEach((catId) => {
+      for (let i = 0; i < mtRand(2, 6); i++) {
+        const item = {
+          name: faker.random.word(),
+          note: faker.random.words(5),
+          image: faker.image.imageUrl(),
+          category_id: catId,
+          user_id: userId,
+        };
+
+        items.push(item);
+
+        // console.log(`Items`, items);
+      }
+    });
   });
 
   await knex("items").insert(items);
   return Promise.resolve();
-
-  // Deletes ALL existing entries
-  // return knex("categories")
-  //   .del()
-  //   .then(function () {
-  //     return knex("items").del();
-  //   })
-  //   .then(function () {
-  //     return knex("users")
-  //       .pluck("id")
-  //       .then((users) => {
-  //         console.log(`Users`, users);
-  //         let categories = [];
-  //         users.forEach((userId) => {
-  //           for (let i = 0; i < 3; i++) {
-  //             const category = {
-  //               name: faker.random.word(),
-  //               user_id: userId,
-  //             };
-  //             categories.push(category);
-  //           }
-  //         });
-  //         return knex("categories").insert(categories);
-  //       })
-  //       .then(() => {
-  //         return knex("categories")
-  //           .pluck("id")
-  //           .then((categories) => {
-  //             console.log(`Categories`, categories);
-  //             categories.forEach((catId) => {
-  //               let items = [];
-  //               for (let i = 0; i < 3; i++) {
-  //                 const item = {
-  //                   name: faker.random.word(),
-  //                   note: faker.random.words(5),
-  //                   image: faker.image.imageUrl(),
-  //                   category_id: catId,
-  //                   user_id: faker.random.arrayElement(users),
-  //                 };
-
-  //                 items.push(item);
-  //                 // console.log(`Items`, items);
-  //               }
-  //               return knex("items")
-  //                 .insert(items)
-  //                 .then(() => {
-  //                   console.log(`In Here`);
-  //                 })
-  //                 .catch((e) => {
-  //                   console.log(`Error`, e);
-  //                 });
-  //             });
-  //           });
-  //       });
-  //   });
 };

@@ -38,14 +38,12 @@ exports.index = async (ctx) => {
 
     let results = [];
     categories.forEach((cat) => {
-      console.log(`cat`, cat);
       results.push({
         category: cat.name,
         items: [],
       });
       items.forEach((item) => {
         if (item.category_id === cat.id) {
-          console.log(`Cat name`, cat.name);
           const index = results.findIndex((r) => r.category === cat.name);
           if (index !== -1) {
             results[index].items.push(item);

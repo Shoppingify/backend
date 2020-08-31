@@ -18,6 +18,53 @@ exports.createList = (user, name) => {
   });
 };
 
+exports.createItems = async (user) => {
+  const [category] = await knex("categories").insert(
+    {
+      name: "New Category",
+      user_id: user.id,
+    },
+    ["*"]
+  );
+
+  const newItems = await knex("items").insert(
+    [
+      {
+        id: 1,
+        name: "First item",
+        user_id: user.id,
+        category_id: category.id,
+      },
+      {
+        id: 2,
+        name: "Second item",
+        user_id: user.id,
+        category_id: category.id,
+      },
+      {
+        id: 3,
+        name: "Third item",
+        user_id: user.id,
+        category_id: category.id,
+      },
+      {
+        id: 4,
+        name: "Fourth item",
+        user_id: user.id,
+        category_id: category.id,
+      },
+      {
+        id: 5,
+        name: "Fifth item",
+        user_id: user.id,
+        category_id: category.id,
+      },
+    ],
+    ["*"]
+  );
+  return newItems;
+};
+
 exports.generateJWT = (user) => {
   console.log(`user`, user);
   return jsonwebtoken.sign(
@@ -31,4 +78,8 @@ exports.generateJWT = (user) => {
     { expiresIn: 60 * 60 * 24 * 7 } // 7 days
     // { expiresIn: 60 }
   );
+};
+
+exports.getRandomItemInArray = (array) => {
+  return array[Math.floor(Math.random() * array.length)];
 };
