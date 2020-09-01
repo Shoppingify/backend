@@ -2,7 +2,6 @@ const knex = require("../db/connection");
 const Joi = require("@hapi/joi");
 const { ValidationError } = require("@hapi/joi");
 const { formatValidationErrors } = require("../utils/formatValidationErrors");
-const { where } = require("../db/connection");
 
 const createItemSchema = Joi.object().keys({
   name: Joi.string().trim().required(),

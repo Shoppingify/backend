@@ -14,6 +14,7 @@ const bodyParser = require("koa-bodyparser");
 const authRoutes = require("./routes/auth");
 const listsRoutes = require("./routes/lists");
 const itemsRoutes = require("./routes/items");
+const itemsListsRoutes = require("./routes/items_lists");
 const app = new Koa();
 const router = new Router({ prefix: "/api" });
 
@@ -57,6 +58,7 @@ app.use(bodyParser());
 router.use(authRoutes.routes());
 router.use(listsRoutes.routes());
 router.use(itemsRoutes.routes());
+router.use(itemsListsRoutes.routes());
 
 app.use(ui(swaggerDocument, "/swagger"));
 app.use(router.routes());

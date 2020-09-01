@@ -61,28 +61,20 @@ describe("Lists routes test", () => {
       });
   });
 
-  it("should create a list for a user", (done) => {
-    createUser("admin@test.fr", "password").then((user) => {
-      chai
-        .request(server)
-        .post("/api/lists")
-        .set("Authorization", "Bearer " + generateJWT(user[0]))
-        .send({ name: "first" })
-        .end((err, res) => {
-          console.log(`Res body`, res.body);
-          should.not.exist(err);
-          res.status.should.equal(201);
-          res.body.data.list.name.should.equal("first");
+  it("should create a list for a user", async () => {
+    const [user] = await createUser("admin@test.fr", "password");
 
-          knex("lists")
-            .where({ user_id: user.id })
-            .then((lists) => {
-              console.log(`Lists`, lists);
-              lists.length.should.equal(1);
-            });
-          done();
-        });
-    });
+    const res = await chai
+      .request(server)
+      .post("/api/lists")
+      .set("Authorization", "Bearer " + generateJWT(user))
+      .send({ name: "first" });
+
+    res.status.should.equal(201);
+    res.body.data.list.name.should.equal("first");
+
+    const list = await knex("lists").where({ user_id: user.id });
+    list.length.should.equal(1);
   });
 
   it("should not create a list with invalid data", (done) => {

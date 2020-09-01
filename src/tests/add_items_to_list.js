@@ -29,13 +29,13 @@ describe("Handle the items and list for a user", () => {
     return knex.migrate.rollback();
   });
 
-  it("should create a new list and add some items", async () => {
+  it("should add some items to a list", async () => {
     const [user] = await createUser("admin@test.fr", "password");
+    const [list] = await createList(user, "First list");
 
     const items = await createItems(user);
 
     const requestData = {
-      name: "First list",
       items: addItemsToRequest(items),
     };
 
@@ -43,24 +43,21 @@ describe("Handle the items and list for a user", () => {
 
     const res = await chai
       .request(server)
-      .post("/api/lists")
+      .post(`/api/lists/${list.id}/items`)
       .set("Authorization", "Bearer " + generateJWT(user))
       .send(requestData);
 
     console.log(`res.body`, res.body);
-    res.status.should.equal(201);
-    res.body.data.should.include.keys("list", "items");
-
-    const listInserted = await knex("lists").where("id", res.body.data.list.id);
-    listInserted.length.should.equal(1);
+    res.status.should.equal(200);
+    res.body.data.should.include.keys("items");
 
     const itemsInserted = await knex("items_lists").where({
-      list_id: res.body.data.list.id,
+      list_id: list.id,
     });
     itemsInserted.length.should.equal(3);
   });
 
-  it("should update a list and add some new items", async () => {
+  it("should add some new items to an existing list", async () => {
     const [user] = await createUser("admin@test.fr", "password");
 
     // Create some items
@@ -79,7 +76,6 @@ describe("Handle the items and list for a user", () => {
 
     // Add new items to the list
     const requestData = {
-      name: "First list",
       items: [
         {
           id: items[0].id,
@@ -95,7 +91,7 @@ describe("Handle the items and list for a user", () => {
 
     const res = await chai
       .request(server)
-      .put(`/api/lists/${list.id}`)
+      .post(`/api/lists/${list.id}/items`)
       .set("Authorization", "Bearer " + generateJWT(user))
       .send(requestData);
 
@@ -127,7 +123,6 @@ describe("Handle the items and list for a user", () => {
 
     // Add new items to the list
     const requestData = {
-      name: "First list",
       items: [
         {
           id: items[0].id,
@@ -138,7 +133,7 @@ describe("Handle the items and list for a user", () => {
 
     const res = await chai
       .request(server)
-      .put(`/api/lists/${list.id}`)
+      .post(`/api/lists/${list.id}/items`)
       .set("Authorization", "Bearer " + generateJWT(user))
       .send(requestData);
 
@@ -167,7 +162,6 @@ describe("Handle the items and list for a user", () => {
 
     // Add new items to the list
     const requestData = {
-      name: "First list",
       items: [
         {
           id: items[1].id,
@@ -178,7 +172,7 @@ describe("Handle the items and list for a user", () => {
 
     const res = await chai
       .request(server)
-      .put(`/api/lists/${list.id}`)
+      .post(`/api/lists/${list.id}/items`)
       .set("Authorization", "Bearer " + generateJWT(user))
       .send(requestData);
 
