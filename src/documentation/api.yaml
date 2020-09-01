@@ -198,6 +198,41 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /lists/{listId}/items:
+    post:
+      summary: "Add/Remove/Update items from a list"
+      tags:
+        - lists
+      description: "This endpoint allows user to add/remove/update items on a list"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            type: "object"
+            properties:
+              items:
+                type: "array"
+                items:
+                  $ref: "#/definitions/ItemsLists"
+
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              data:
+                type: "object"
+                items: "array"
+        401:
+          $ref: "#/responses/401"
+        404:
+          $ref: "#/responses/404"
+
   # ITEMS
   /items:
     get:
@@ -313,6 +348,19 @@ responses:
       $ref: "#/definitions/Error"
 
 definitions:
+  ItemsLists:
+    type: "object"
+    required:
+      - item_id
+      - quantity
+    properties:
+      item_id:
+        type: "integer"
+        example: 1
+      quantity:
+        type: "integer"
+        example: 3
+
   LoginRequest:
     type: "object"
     required:
