@@ -199,6 +199,29 @@ paths:
             $ref: "#/definitions/Error"
 
   /lists/{listId}/items:
+    get:
+      summary: "Fetch the items from a user's list"
+      tags:
+        - lists
+      description: "This endpoint allows user to fetch items from a user's list"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/ItemsListsResponse"
+
+        401:
+          $ref: "#/responses/401"
+        404:
+          $ref: "#/responses/404"
+
     post:
       summary: "Add/Remove/Update items from a list"
       tags:
@@ -360,6 +383,36 @@ definitions:
       quantity:
         type: "integer"
         example: 3
+
+  ItemsListsResponse:
+    type: "object"
+    properties:
+      category:
+        type: "string"
+        example: "Banana"
+      items:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+              example: 1
+            item_id:
+              type: "integer"
+              example: 1
+            list_id:
+              type: "integer"
+              example: 1
+            name:
+              type: "string"
+              example: "Banana"
+            category_id:
+              type: "integer"
+              example: 1
+            categoryName:
+              type: "string"
+              example: "Category 1"
 
   LoginRequest:
     type: "object"

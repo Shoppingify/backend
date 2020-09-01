@@ -27,6 +27,14 @@ exports.createItems = async (user) => {
     ["*"]
   );
 
+  const [category2] = await knex("categories").insert(
+    {
+      name: "Second Category",
+      user_id: user.id,
+    },
+    ["*"]
+  );
+
   const newItems = await knex("items").insert(
     [
       {
@@ -45,7 +53,7 @@ exports.createItems = async (user) => {
         id: 3,
         name: "Third item",
         user_id: user.id,
-        category_id: category.id,
+        category_id: category2.id,
       },
       {
         id: 4,
