@@ -1,0 +1,6 @@
+::1 - - [01/Sep/2020:13:16:39 +0000] "OPTIONS /api/me HTTP/1.1" 204 - "http://localhost:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36"
+::1 - - [01/Sep/2020:13:16:39 +0000] "GET /api/me HTTP/1.1" 200 141 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36"
+::1 - - [01/Sep/2020:13:16:42 +0000] "OPTIONS /api/items HTTP/1.1" 204 - "http://localhost:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36"
+::1 - - [01/Sep/2020:13:16:42 +0000] "GET /api/items HTTP/1.1" 200 4613 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36"
+::1 - - [01/Sep/2020:13:16:56 +0000] "OPTIONS /api/items HTTP/1.1" 204 - "http://localhost:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36"
+::1 - - [01/Sep/2020:13:16:56 +0000] "GET /api/items HTTP/1.1" 200 4613 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36"
