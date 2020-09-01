@@ -3,6 +3,7 @@ const fs = require("fs");
 const morgan = require("koa-morgan");
 const swagger = require("swagger2");
 const { ui, validate } = require("swagger2-koa");
+console.log(`NODE_ENV`, process.env.NODE_ENV);
 require("dotenv").config({
   path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`),
 });

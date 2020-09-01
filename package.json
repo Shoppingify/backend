@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env-shell NODE_ENV=development & nodemon src/server.js",
-    "dev-remote": "cross-env-shell NODE_ENV=production & nodemon src/server.js",
-    "build": "cross-env-shell NODE_ENV=production & node src/server.js",
-    "test": "cross-env-shell NODE_ENV=test & mocha --timeout 10000 ./src/tests/**/*.test.js --exit",
-    "mocha": "cross-env-shell NODE_ENV=test & mocha --timeout 10000 --exit"
+    "dev": "cross-env NODE_ENV=development nodemon src/server.js",
+    "dev-remote": "cross-env NODE_ENV=production nodemon src/server.js",
+    "build": "cross-env NODE_ENV=production node src/server.js",
+    "test": "cross-env NODE_ENV=test & mocha --timeout 10000 ./src/tests/**/*.test.js --exit",
+    "mocha": "cross-env NODE_ENV=test & mocha --timeout 10000 --exit"
   },
   "repository": {
     "type": "git",
