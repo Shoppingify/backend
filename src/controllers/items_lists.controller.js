@@ -12,10 +12,55 @@ const itemsListsSchema = Joi.object().keys({
   items: Joi.array().items(itemCreateSchema),
 });
 
+exports.index = async (ctx) => {
+  try {
+    const [list] = await knex("lists")
+      .where("id", parseInt(ctx.params.listId, 10))
+      .andWhere("user_id", ctx.state.user.id);
+    console.log(`List`, list);
+    if (!list) {
+      ctx.status = 404;
+      ctx.body = {
+        status: "error",
+        message: "List not found",
+      };
+      return ctx;
+    }
+
+    // Fetch the items
+    const items = await knex
+      .from("items_lists")
+      .select(
+        "items_lists.id",
+        "items_lists.item_id",
+        "items_lists.list_id",
+        "items.name",
+        "items.category_id",
+        "categories.name as categoryName"
+      )
+      .innerJoin("items", "items.id", "items_lists.item_id")
+      .innerJoin("categories", "categories.id", "items.category_id")
+      .where("list_id", list.id);
+
+    const groupedByCategories = groupByCategories(items, "categoryName");
+    console.log(`Items from the route`, groupedByCategories);
+    ctx.status = 200;
+    ctx.body = {
+      status: "success",
+      data: {
+        groupedByCategories,
+      },
+    };
+  } catch (e) {
+    console.log(`E`, e);
+  }
+};
+
 exports.create = async (ctx) => {
   try {
     const [list] = await knex("lists")
       .where("id", parseInt(ctx.params.listId, 10))
+      .andWhere("user_id", ctx.state.user.id)
       .returning("*");
     if (!list) {
       ctx.status = 404;
@@ -114,4 +159,28 @@ const synchronizeItems = async (items, list) => {
     console.log(`Error synchronizing items`, e);
     return [];
   }
+};
+
+const groupByCategories = (items) => {
+  return items.reduce((acc, value) => {
+    if (acc.length === 0) {
+      acc.push({
+        category: value.categoryName,
+        items: [].concat(value),
+      });
+    } else {
+      const index = acc.findIndex(
+        (item) => item.category === value.categoryName
+      );
+      if (index !== -1) {
+        acc[index].items.push(value);
+      } else {
+        acc.push({
+          category: value.categoryName,
+          items: [].concat(value),
+        });
+      }
+    }
+    return acc;
+  }, []);
 };

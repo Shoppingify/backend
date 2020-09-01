@@ -29,6 +29,36 @@ describe("Handle the items and list for a user", () => {
     return knex.migrate.rollback();
   });
 
+  it("should get the list's item", async () => {
+    const [user] = await createUser("admin@test.fr", "password");
+    const [list] = await createList(user, "First list");
+
+    // Add items
+    const items = await createItems(user);
+
+    // Inser items to the list
+    await knex("items_lists").insert(
+      items.map((item) => {
+        return {
+          item_id: item.id,
+          list_id: list.id,
+        };
+      }),
+      ["*"]
+    );
+
+    const res = await chai
+      .request(server)
+      .get(`/api/lists/${list.id}/items`)
+      .set("Authorization", "Bearer " + generateJWT(user));
+
+    res.status.should.equal(200);
+
+    const itemsInTheList = await knex("items_lists").where("list_id", list.id);
+
+    itemsInTheList.length.should.equal(items.length);
+  });
+
   it("should add some items to a list", async () => {
     const [user] = await createUser("admin@test.fr", "password");
     const [list] = await createList(user, "First list");
@@ -180,6 +210,36 @@ describe("Handle the items and list for a user", () => {
 
     const newItems = await knex("items_lists").where("list_id", list.id);
     newItems.length.should.equal(1);
+  });
+
+  it("should not authorize to add items to a list which belongs to another user", async () => {
+    const [user] = await createUser("admin@test.fr", "password");
+    const [other] = await createUser("other@test.fr", "password");
+
+    const [list] = await createList(user, "First list");
+
+    // Create an item for the other user with a list
+    const items = await createItems(other);
+
+    const res = await chai
+      .request(server)
+      .post(`/api/lists/${list.id}/items`)
+      .set("Authorization", "Bearer " + generateJWT(other))
+      .send({
+        items: {
+          id: items[0].id,
+          quantity: 4,
+        },
+      });
+
+    // It should not find the list
+    res.status.should.equal(404);
+
+    const itemsInFirstList = await knex("items_lists").where(
+      "list_id",
+      list.id
+    );
+    itemsInFirstList.length.should.equal(0);
   });
 });
 
