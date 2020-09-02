@@ -377,7 +377,7 @@ definitions:
       - item_id
       - quantity
     properties:
-      item_id:
+      id:
         type: "integer"
         example: 1
       quantity:
