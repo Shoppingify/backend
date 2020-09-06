@@ -651,3 +651,5 @@
 ::ffff:127.0.0.1 - - [06/Sep/2020:16:11:10 +0000] "GET /api/lists?status=active&truc=machin HTTP/1.1" 500 47 "-" "node-superagent/3.8.3"
 ::ffff:127.0.0.1 - - [06/Sep/2020:16:12:51 +0000] "GET /api/lists?status=active&truc=machin HTTP/1.1" 200 168 "-" "node-superagent/3.8.3"
 ::ffff:127.0.0.1 - - [06/Sep/2020:16:13:32 +0000] "GET /api/lists?status=active&truc=machin HTTP/1.1" 200 168 "-" "node-superagent/3.8.3"
+::1 - - [06/Sep/2020:16:51:06 +0000] "GET /api/lists/2/items HTTP/1.1" 200 507 "-" "PostmanRuntime/7.26.3"
+::1 - - [06/Sep/2020:16:51:49 +0000] "GET /api/lists/2/items HTTP/1.1" 200 347 "-" "PostmanRuntime/7.26.3"
