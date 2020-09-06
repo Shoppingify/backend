@@ -8,7 +8,9 @@
     "dev-remote": "cross-env NODE_ENV=production nodemon src/server.js",
     "build": "cross-env NODE_ENV=production node src/server.js",
     "test": "cross-env NODE_ENV=test mocha --timeout 10000 ./src/tests/**/*.test.js --exit",
-    "mocha": "cross-env NODE_ENV=test mocha --timeout 10000 --exit"
+    "mocha": "cross-env NODE_ENV=test mocha --timeout 10000 --exit",
+    "mg": "knex migrate:latest",
+    "mg:production": "cross-env NODE_ENV=production knex migrate:latest"
   },
   "repository": {
     "type": "git",
