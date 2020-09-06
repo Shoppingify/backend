@@ -177,7 +177,7 @@ describe('Lists routes test', () => {
     res.body.message.should.equal('You can only have on active list at a time')
   })
 
-  it.only('should only get the active list', async () => {
+  it('should only get the active list', async () => {
     const [user] = await createUser('admin@test.fr', 'password')
     const [list] = await createList(user, 'First list')
     const [secondList] = await createList(user, 'Second list', 'completed')

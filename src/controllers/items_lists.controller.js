@@ -31,8 +31,8 @@ exports.index = async (ctx) => {
     const items = await knex
       .from('items_lists')
       .select(
-        'items_lists.id',
-        'items_lists.item_id',
+        // 'items_lists.id',
+        'items_lists.item_id as id',
         'items_lists.list_id',
         'items_lists.done',
         'items_lists.quantity',
