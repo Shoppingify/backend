@@ -13,14 +13,32 @@ const listUpdateSchema = Joi.object().keys({
   status: Joi.string().valid('active', 'completed', 'canceled'),
 })
 
+const authorizedFilter = ['status']
+
 exports.index = async (ctx) => {
+  // Check if we have filters
+  const params = ctx.query
+  let filters = []
+  for (const prop in ctx.query) {
+    if (authorizedFilter.includes(prop)) {
+      filters.push({
+        filter: prop,
+        value: params[prop],
+      })
+    }
+  }
+  console.log(`filters`, filters)
   // Fetch the lists
   try {
-    const lists = await knex('lists')
-      .where({
-        user_id: ctx.state.user.id,
-      })
-      .select('*')
+    const queryBuilder = knex('lists').where({
+      user_id: ctx.state.user.id,
+    })
+
+    filters.forEach((el) => {
+      queryBuilder.andWhere(el.filter, el.value)
+    })
+
+    const lists = await queryBuilder.select('*')
 
     ctx.status = 200
     ctx.body = {
@@ -28,6 +46,7 @@ exports.index = async (ctx) => {
       data: lists,
     }
   } catch (e) {
+    console.log(`Er`, e)
     ctx.status = e.status || 500
     ctx.body = {
       status: 'error',

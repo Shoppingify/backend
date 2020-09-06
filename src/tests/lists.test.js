@@ -177,6 +177,21 @@ describe('Lists routes test', () => {
     res.body.message.should.equal('You can only have on active list at a time')
   })
 
+  it.only('should only get the active list', async () => {
+    const [user] = await createUser('admin@test.fr', 'password')
+    const [list] = await createList(user, 'First list')
+    const [secondList] = await createList(user, 'Second list', 'completed')
+
+    const res = await chai
+      .request(server)
+      .get('/api/lists?status=active&truc=machin')
+      .set('Authorization', 'Bearer ' + generateJWT(user))
+
+    res.status.should.eql(200)
+    res.body.data.length.should.eql(1)
+    res.body.data[0].status.should.eql('active')
+  })
+
   it('should delete a list', (done) => {
     createUser('admin@test.fr', 'password').then((user) => {
       createList(user[0], 'first').then((list) => {
