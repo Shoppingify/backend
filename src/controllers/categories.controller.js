@@ -2,10 +2,9 @@ const knex = require('../db/connection')
 
 exports.index = async (ctx) => {
   try {
-    const categories = await knex('categories').where(
-      'user_id',
-      ctx.state.user.id
-    )
+    const categories = await knex('categories')
+      .where('user_id', ctx.state.user.id)
+      .orWhere('user_id', null)
 
     ctx.status = 200
     ctx.body = {
