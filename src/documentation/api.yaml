@@ -348,6 +348,26 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /categories:
+    get:
+      summary: "Fetch all categories from a user"
+      tags:
+        - categories
+      description: "This endpoint allows user to fetch all his categories"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/CategoriesResponse"
+        404:
+          description: "Error"
+          schema:
+            $ref: "#/definitions/Error"
+
 responses:
   400:
     description: Bad Request
@@ -514,6 +534,33 @@ definitions:
         type: "string"
       updated_at:
         type: "string"
+
+  CategoriesResponse:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        example: "success"
+      data:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+              example: 1
+            name:
+              type: "string"
+              example: "Category"
+            user_id:
+              type: "integer"
+              example: 1
+            created_at:
+              type: "string"
+              example: "2020-09-02T14:48:41.919Z"
+            updated_at:
+              type: "string"
+              example: "2020-09-02T14:48:41.919Z"
 
   Error:
     type: "object"
