@@ -30,10 +30,11 @@ exports.index = async (ctx) => {
       .select('*')
 
     const items = await knex('items')
+      .innerJoin('categories', 'items.category_id', '=', 'categories.id')
       .where({
-        user_id: ctx.state.user.id,
+        'items.user_id': ctx.state.user.id,
       })
-      .select('*')
+      .select('items.*', 'categories.name as categoryName')
 
     let results = []
     categories.forEach((cat) => {
@@ -69,7 +70,7 @@ exports.index = async (ctx) => {
 // Create an item
 exports.create = async (ctx) => {
   try {
-    const valid = await createItemSchema.validateAsync(ctx.request.body)
+    await createItemSchema.validateAsync(ctx.request.body)
 
     const { name, note, image, category } = ctx.request.body
 
@@ -79,11 +80,11 @@ exports.create = async (ctx) => {
       // .orWhere("user_id", null)
       .whereRaw('(user_id IS NULL OR user_id = ?)', [ctx.state.user.id])
       .andWhere('name', 'ILIKE', `%${category}%`)
-      .select('id')
+      .select('id', 'name')
 
     if (cat.length === 1) {
       // The category exists so I just need to insert the item
-      const newItem = await knex('items')
+      const [newItem] = await knex('items')
         .returning('*')
         .insert({
           name,
@@ -93,33 +94,40 @@ exports.create = async (ctx) => {
           user_id: ctx.state.user.id,
         })
 
+      newItem['categoryName'] = cat[0].name
+
+      // add the categoryName to the item
+
       ctx.status = 201
       ctx.body = {
         status: 'success',
-        data: newItem[0],
+        data: newItem,
       }
     } else {
       // Create a new Category
-      const newCategory = await knex('categories').returning('id').insert({
+      const newCategory = await knex('categories').returning('*').insert({
         name: category,
         user_id: ctx.state.user.id,
       })
 
       // Create a new Item with the new category associated
-      const newItem = await knex('items')
+      const [newItem] = await knex('items')
         .returning('*')
         .insert({
           name,
           note: note || '',
           image: image || '',
-          category_id: newCategory[0],
+          category_id: newCategory[0].id,
           user_id: ctx.state.user.id,
         })
+
+      // Add the categoryName to the item
+      newItem['categoryName'] = newCategory[0].name
 
       ctx.status = 201
       ctx.body = {
         status: 'success',
-        data: newItem[0],
+        data: newItem,
       }
     }
   } catch (e) {
@@ -166,11 +174,11 @@ exports.update = async (ctx) => {
       // .orWhere("user_id", null)
       .whereRaw('(user_id IS NULL OR user_id = ?)', [ctx.state.user.id])
       .andWhere('name', 'ILIKE', `%${category}%`)
-      .select('id')
+      .select('id', 'name')
 
     if (cat.length === 1) {
       // The category exists so I just need to insert the item
-      const newItem = await knex('items')
+      const [newItem] = await knex('items')
         .where('id', id)
         .update(
           {
@@ -183,36 +191,42 @@ exports.update = async (ctx) => {
           ['*']
         )
 
+      // Add the categoryName to the item
+      newItem['categoryName'] = cat[0].name
+
       ctx.status = 200
       ctx.body = {
         status: 'success',
-        data: newItem[0],
+        data: newItem,
       }
     } else {
       // Create a new Category
-      const newCategory = await knex('categories').returning('id').insert({
+      const newCategory = await knex('categories').returning('*').insert({
         name: category,
         user_id: ctx.state.user.id,
       })
 
       // Create a new Item with the new category associated
-      const newItem = await knex('items')
+      const [newItem] = await knex('items')
         .where('id', id)
         .update(
           {
             name,
             note: note || '',
             image: image || '',
-            category_id: newCategory[0],
+            category_id: newCategory[0].id,
             user_id: ctx.state.user.id,
           },
           ['*']
         )
 
+      // Add the categoryName to the item
+      newItem['categoryName'] = newCategory[0].name
+
       ctx.status = 200
       ctx.body = {
         status: 'success',
-        data: newItem[0],
+        data: newItem,
       }
     }
   } catch (e) {
