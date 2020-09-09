@@ -225,10 +225,21 @@ exports.delete = async (ctx) => {
     }
 
     // Delete the item
-    await knex('items_lists')
+    const rows = await knex('items_lists')
       .where('item_id', item_id)
       .andWhere('list_id', list_id)
       .delete()
+
+    if (rows === 0) {
+      ctx.status = 404
+      ctx.body = {
+        status: 'error',
+        message: 'This item is no longer in this list',
+      }
+      return ctx
+    }
+
+    console.log(`deleted rows`, rows)
 
     ctx.status = 204
   } catch (e) {
