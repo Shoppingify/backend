@@ -76,23 +76,25 @@ exports.create = async (ctx) => {
       .where('id', list_id)
       .andWhere('user_id', ctx.state.user.id)
 
+    const [item] = await knex('items')
+      .where('id', item_id)
+      .andWhere('user_id', ctx.state.user.id)
+
+    if (!list || !item) {
+      ctx.status = 400
+      ctx.body = {
+        status: 'error',
+        message: 'Invalid request... The list or the item does not exists',
+      }
+      return ctx
+    }
+
     if (list.status !== 'active') {
       ctx.status = 400
       ctx.body = {
         status: 'error',
         message:
           "You cannot add an item to a list if its status is not 'active'",
-      }
-      return ctx
-    }
-    const [item] = await knex('items')
-      .where('id', item_id)
-      .andWhere('user_id', ctx.state.user.id)
-    if (!list || !item) {
-      ctx.status = 400
-      ctx.body = {
-        status: 'error',
-        message: 'Invalid request... The list or the item does not exists',
       }
       return ctx
     }
@@ -133,6 +135,19 @@ exports.update = async (ctx) => {
       .where('id', list_id)
       .andWhere('user_id', ctx.state.user.id)
 
+    const [item] = await knex('items')
+      .where('id', item_id)
+      .andWhere('user_id', ctx.state.user.id)
+
+    if (!list || !item) {
+      ctx.status = 400
+      ctx.body = {
+        status: 'error',
+        message: 'Invalid request... The list or the item does not exists',
+      }
+      return ctx
+    }
+
     // You could only update the quantity if the list status is active and done is false
     if (list.status !== 'active' && done && done === false) {
       ctx.status = 400
@@ -140,17 +155,6 @@ exports.update = async (ctx) => {
         status: 'error',
         message:
           "You cannot update an item to a list if its status is not 'active'",
-      }
-      return ctx
-    }
-    const [item] = await knex('items')
-      .where('id', item_id)
-      .andWhere('user_id', ctx.state.user.id)
-    if (!list || !item) {
-      ctx.status = 400
-      ctx.body = {
-        status: 'error',
-        message: 'Invalid request... The list or the item does not exists',
       }
       return ctx
     }
@@ -187,6 +191,7 @@ exports.update = async (ctx) => {
 }
 
 exports.delete = async (ctx) => {
+  console.log(`ctx request`, ctx.request.body)
   try {
     await itemDeleteSchema.validateAsync(ctx.request.body)
 
@@ -195,16 +200,6 @@ exports.delete = async (ctx) => {
     const [list] = await knex('lists')
       .where('id', list_id)
       .andWhere('user_id', ctx.state.user.id)
-
-    if (list.status !== 'active') {
-      ctx.status = 400
-      ctx.body = {
-        status: 'error',
-        message:
-          "You cannot delete an item from a list if its status is not 'active'",
-      }
-      return ctx
-    }
 
     const [item] = await knex('items')
       .where('id', item_id)
@@ -215,6 +210,16 @@ exports.delete = async (ctx) => {
       ctx.body = {
         status: 'error',
         message: 'Invalid request... The list or the item does not exists',
+      }
+      return ctx
+    }
+
+    if (list.status !== 'active') {
+      ctx.status = 400
+      ctx.body = {
+        status: 'error',
+        message:
+          "You cannot delete an item from a list if its status is not 'active'",
       }
       return ctx
     }
