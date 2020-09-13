@@ -50,7 +50,7 @@ exports.update = async (ctx) => {
     //Check if the user has already a category with this name
     const [categoryExists] = await knex('categories')
       .where('user_id', ctx.state.user.id)
-      .andWhere('name', 'ILIKE', `%${name}%`)
+      .andWhereRaw('LOWER(name) = ?', name.toLowerCase())
 
     if (categoryExists) {
       ctx.status = 422
