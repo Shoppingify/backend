@@ -38,7 +38,7 @@ exports.index = async (ctx) => {
       queryBuilder.andWhere(el.filter, el.value)
     })
 
-    const lists = await queryBuilder.select('*')
+    const lists = await queryBuilder.select('*').orderBy('created_at', 'desc')
 
     ctx.status = 200
     ctx.body = {
