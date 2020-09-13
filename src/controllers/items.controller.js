@@ -39,6 +39,7 @@ exports.index = async (ctx) => {
     let results = []
     categories.forEach((cat) => {
       results.push({
+        category_id: cat.id,
         category: cat.name,
         items: [],
       })
