@@ -80,7 +80,7 @@ exports.create = async (ctx) => {
       // .where("user_id", ctx.state.user.id)
       // .orWhere("user_id", null)
       .whereRaw('(user_id IS NULL OR user_id = ?)', [ctx.state.user.id])
-      .andWhere('name', 'ILIKE', `%${category}%`)
+      .andWhereRaw('LOWER(name) = ?', category.toLowerCase())
       .select('id', 'name')
 
     if (cat.length === 1) {
@@ -174,7 +174,7 @@ exports.update = async (ctx) => {
       // .where("user_id", ctx.state.user.id)
       // .orWhere("user_id", null)
       .whereRaw('(user_id IS NULL OR user_id = ?)', [ctx.state.user.id])
-      .andWhere('name', 'ILIKE', `%${category}%`)
+      .andWhereRaw('LOWER(name) = ?', category.toLowerCase())
       .select('id', 'name')
 
     if (cat.length === 1) {

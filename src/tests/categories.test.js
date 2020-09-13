@@ -85,4 +85,19 @@ describe('categories routes test', () => {
     res.status.should.eql(422)
     res.body.message.should.equal('You already have a category with this name')
   })
+
+  it('should authorize to update a category if the name is not strictly equal', async () => {
+    const [user] = await createUser('admin@test.fr', 'password')
+    const [category] = await createCategory(user)
+
+    const res = await chai
+      .request(server)
+      .put(`/api/categories/${category.id}`)
+      .set('Authorization', 'Bearer ' + generateJWT(user))
+      .send({
+        name: 'Category!',
+      })
+
+    res.status.should.eql(200)
+  })
 })
