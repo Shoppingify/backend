@@ -39,7 +39,7 @@ exports.update = async (ctx) => {
       .andWhere('user_id', ctx.state.user.id)
 
     if (!category) {
-      ctx.status = 400
+      ctx.status = 404
       ctx.body = {
         status: 'error',
         message: 'Category not found',
