@@ -19,6 +19,13 @@ exports.createList = (user, name, status = 'active') => {
   })
 }
 
+exports.createCategory = (user) => {
+  return knex('categories').returning(['*']).insert({
+    name: 'Category',
+    user_id: user.id,
+  })
+}
+
 exports.createItems = async (user) => {
   const [category] = await knex('categories').insert(
     {

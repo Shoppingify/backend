@@ -1,202 +1,202 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
-  title: 'Shoppingify'
+  title: "Shoppingify"
   description: >
     Api documentation for the Shoppingify api.
-  version: '1.0.0'
-host: 'localhost:3000/api'
-basePath: '/'
+  version: "1.0.0"
+host: "localhost:3000/api"
+basePath: "/"
 schemes:
-  - 'http'
+  - "http"
 paths:
   /login:
     post:
-      summary: 'Authenticate an user'
+      summary: "Authenticate an user"
       tags:
         - auth
-      description: 'This endpoint allows users to generate a token so they can login'
+      description: "This endpoint allows users to generate a token so they can login"
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       parameters:
-        - in: 'body'
-          name: 'body'
-          description: 'Email and password to authenticate'
+        - in: "body"
+          name: "body"
+          description: "Email and password to authenticate"
           required: true
           schema:
-            $ref: '#/definitions/LoginRequest'
+            $ref: "#/definitions/LoginRequest"
       responses:
         201:
-          description: 'successful operation'
+          description: "successful operation"
           schema:
-            $ref: '#/definitions/LoginResponse'
+            $ref: "#/definitions/LoginResponse"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
         422:
-          $ref: '#/responses/422'
+          $ref: "#/responses/422"
         500:
-          $ref: '#/responses/500'
+          $ref: "#/responses/500"
 
   /register:
     post:
-      summary: 'Register a user'
+      summary: "Register a user"
       tags:
         - auth
-      description: 'This endpoint allows users to register'
+      description: "This endpoint allows users to register"
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       parameters:
-        - in: 'body'
-          name: 'body'
-          description: 'Email and password to authenticate'
+        - in: "body"
+          name: "body"
+          description: "Email and password to authenticate"
           required: true
           schema:
-            $ref: '#/definitions/LoginRequest'
+            $ref: "#/definitions/LoginRequest"
       responses:
         201:
-          description: 'successful operation'
+          description: "successful operation"
           schema:
-            $ref: '#/definitions/LoginResponse'
+            $ref: "#/definitions/LoginResponse"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
         422:
-          $ref: '#/responses/422'
+          $ref: "#/responses/422"
         500:
-          $ref: '#/responses/500'
+          $ref: "#/responses/500"
 
   /me:
     get:
-      summary: 'Get the connected user informations'
+      summary: "Get the connected user informations"
       tags:
         - auth
       responses:
         200:
-          description: 'Success'
+          description: "Success"
           schema:
-            type: 'object'
+            type: "object"
             properties:
               id:
-                type: 'string'
+                type: "string"
                 example: 1
               email:
-                type: 'string'
-                example: 'example@mail.com'
+                type: "string"
+                example: "example@mail.com"
               created_at:
-                type: 'string'
-                example: '2020-08-30T13:38:36.383Z'
+                type: "string"
+                example: "2020-08-30T13:38:36.383Z"
               updated_at:
-                type: 'string'
-                example: '2020-08-30T13:38:36.383Z'
+                type: "string"
+                example: "2020-08-30T13:38:36.383Z"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
         404:
-          $ref: '#/responses/404'
+          $ref: "#/responses/404"
         500:
-          $ref: '#/responses/500'
+          $ref: "#/responses/500"
 
   /lists:
     get:
-      summary: 'Fetch all the connected user lists'
+      summary: "Fetch all the connected user lists"
       tags:
         - lists
     post:
-      summary: 'Create a list for the connected user'
+      summary: "Create a list for the connected user"
       tags:
         - lists
-      description: 'This endpoint allows user to create a list'
+      description: "This endpoint allows user to create a list"
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       parameters:
-        - in: 'body'
-          name: 'body'
+        - in: "body"
+          name: "body"
           schema:
-            type: 'object'
+            type: "object"
             required:
               - name
             properties:
               name:
                 type: string
-                example: 'List name'
+                example: "List name"
       responses:
         201:
-          description: 'Success'
+          description: "Success"
           schema:
-            $ref: '#/definitions/ListResponse'
+            $ref: "#/definitions/ListResponse"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
         422:
-          $ref: '#/responses/422'
+          $ref: "#/responses/422"
 
   /lists/{id}:
     get:
-      summary: 'Get a single list'
+      summary: "Get a single list"
       tags:
         - lists
-      description: 'This endpoint allows user to get a list'
+      description: "This endpoint allows user to get a list"
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       responses:
         201:
-          description: 'Success'
+          description: "Success"
           schema:
-            $ref: '#/definitions/ListResponse'
+            $ref: "#/definitions/ListResponse"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
         404:
-          $ref: '#/responses/404'
+          $ref: "#/responses/404"
 
     put:
-      summary: 'Update a list'
+      summary: "Update a list"
       tags:
         - lists
-      description: 'This endpoint allows user to update a list'
+      description: "This endpoint allows user to update a list"
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       parameters:
-        - in: 'body'
-          name: 'body'
+        - in: "body"
+          name: "body"
           schema:
-            type: 'object'
+            type: "object"
             properties:
               name:
-                type: 'string'
-                example: 'List name'
+                type: "string"
+                example: "List name"
               status:
-                type: 'string'
-                example: 'active | completed | canceled'
+                type: "string"
+                example: "active | completed | canceled"
       responses:
         201:
-          description: 'Success'
+          description: "Success"
           schema:
-            $ref: '#/definitions/ListResponse'
+            $ref: "#/definitions/ListResponse"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
         422:
-          $ref: '#/responses/422'
+          $ref: "#/responses/422"
 
     delete:
       summary: "Delete a user's list"
       tags:
         - lists
-      description: 'This endpoint allows user to delete an list'
+      description: "This endpoint allows user to delete an list"
       responses:
         204:
-          description: 'Success'
+          description: "Success"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
         404:
-          description: 'Error'
+          description: "Error"
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
 
   /lists/{listId}/items:
     get:
@@ -205,492 +205,524 @@ paths:
         - lists
       description: "This endpoint allows user to fetch items from a user's list"
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       responses:
         200:
-          description: 'Success'
+          description: "Success"
           schema:
-            type: 'object'
+            type: "object"
             properties:
               data:
-                $ref: '#/definitions/ItemsListsResponse'
+                $ref: "#/definitions/ItemsListsResponse"
 
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
         404:
-          $ref: '#/responses/404'
+          $ref: "#/responses/404"
 
     post:
-      summary: 'Add item to a list'
+      summary: "Add item to a list"
       tags:
         - lists
-      description: 'This endpoint allows user to add an item to a list'
+      description: "This endpoint allows user to add an item to a list"
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       parameters:
-        - in: 'body'
-          name: 'body'
+        - in: "body"
+          name: "body"
           schema:
-            type: 'object'
+            type: "object"
             properties:
               item_id:
-                type: 'integer'
+                type: "integer"
                 example: 1
                 required: true
               list_id:
-                type: 'integer'
+                type: "integer"
                 example: 1
                 required: true
 
       responses:
         201:
-          description: 'Success'
+          description: "Success"
           schema:
-            type: 'object'
+            type: "object"
             properties:
               status:
-                type: 'string'
-                example: 'success'
+                type: "string"
+                example: "success"
               data:
-                type: 'object'
+                type: "object"
                 properties:
                   item_id:
-                    type: 'integer'
+                    type: "integer"
                     example: 1
                   list_id:
-                    type: 'integer'
+                    type: "integer"
                     example: 1
                   quantity:
-                    type: 'integer'
+                    type: "integer"
                     example: 2
                   done:
-                    type: 'boolean'
+                    type: "boolean"
                     example: false
 
         400:
-          $ref: '#/responses/400'
+          $ref: "#/responses/400"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
 
     put:
-      summary: 'update an item in a list'
+      summary: "update an item in a list"
       tags:
         - lists
-      description: 'This endpoint allows user to update an item in a list'
+      description: "This endpoint allows user to update an item in a list"
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       parameters:
-        - in: 'body'
-          name: 'body'
+        - in: "body"
+          name: "body"
           schema:
-            type: 'object'
+            type: "object"
             properties:
               item_id:
-                type: 'integer'
+                type: "integer"
                 example: 1
                 required: true
               list_id:
-                type: 'integer'
+                type: "integer"
                 example: 1
                 required: true
               quantity:
-                type: 'integer'
+                type: "integer"
                 example: 3
                 required: true
               done:
-                type: 'boolean'
+                type: "boolean"
                 example: false
 
       responses:
         200:
-          description: 'Success'
+          description: "Success"
           schema:
-            type: 'object'
+            type: "object"
             properties:
               status:
-                type: 'string'
-                example: 'success'
+                type: "string"
+                example: "success"
               data:
-                type: 'object'
+                type: "object"
                 properties:
                   item_id:
-                    type: 'integer'
+                    type: "integer"
                     example: 1
                   list_id:
-                    type: 'integer'
+                    type: "integer"
                     example: 1
                   quantity:
-                    type: 'integer'
+                    type: "integer"
                     example: 2
                   done:
-                    type: 'boolean'
+                    type: "boolean"
                     example: false
 
         400:
-          $ref: '#/responses/400'
+          $ref: "#/responses/400"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
 
     delete:
-      summary: 'delete an item from a list'
+      summary: "delete an item from a list"
       tags:
         - lists
-      description: 'This endpoint allows the user to delete an item from a list'
+      description: "This endpoint allows the user to delete an item from a list"
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       parameters:
-        - in: 'body'
-          name: 'body'
+        - in: "body"
+          name: "body"
           schema:
-            type: 'object'
+            type: "object"
             properties:
               item_id:
-                type: 'integer'
+                type: "integer"
                 example: 1
                 required: true
               list_id:
-                type: 'integer'
+                type: "integer"
                 example: 1
                 required: true
 
       responses:
         204:
-          description: 'Success'
+          description: "Success"
         400:
-          $ref: '#/responses/400'
+          $ref: "#/responses/400"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
 
   # ITEMS
   /items:
     get:
-      summary: 'Fetch items grouped by categories'
+      summary: "Fetch items grouped by categories"
       tags:
         - items
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       responses:
         200:
-          description: 'Success'
+          description: "Success"
           schema:
-            type: 'object'
+            type: "object"
             properties:
               status:
-                type: 'string'
-                example: 'success'
+                type: "string"
+                example: "success"
               data:
-                type: 'array'
+                type: "array"
                 items:
-                  category: 'string'
+                  category: "string"
 
     post:
-      summary: 'Create an item'
+      summary: "Create an item"
       tags:
         - items
-      description: 'This endpoint allows user to create an item'
+      description: "This endpoint allows user to create an item"
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       parameters:
-        - in: 'body'
-          name: 'body'
+        - in: "body"
+          name: "body"
           schema:
-            $ref: '#/definitions/ItemPostRequest'
+            $ref: "#/definitions/ItemPostRequest"
       responses:
         201:
-          description: 'Success'
+          description: "Success"
           schema:
-            $ref: '#/definitions/ItemResponse'
+            $ref: "#/definitions/ItemResponse"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
         422:
-          $ref: '#/responses/422'
+          $ref: "#/responses/422"
 
   /items/id:
     put:
-      summary: 'Update an item'
+      summary: "Update an item"
       tags:
         - items
-      description: 'This endpoint allows user to update an item'
+      description: "This endpoint allows user to update an item"
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       parameters:
-        - in: 'body'
-          name: 'body'
+        - in: "body"
+          name: "body"
           schema:
-            $ref: '#/definitions/ItemPutRequest'
+            $ref: "#/definitions/ItemPutRequest"
       responses:
         200:
-          description: 'Success'
+          description: "Success"
           schema:
-            $ref: '#/definitions/ItemResponse'
+            $ref: "#/definitions/ItemResponse"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
         404:
-          description: 'Error'
+          description: "Error"
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
         422:
-          $ref: '#/responses/422'
+          $ref: "#/responses/422"
 
     delete:
-      summary: 'Delete an item'
+      summary: "Delete an item"
       tags:
         - items
-      description: 'This endpoint allows user to delete an item'
+      description: "This endpoint allows user to delete an item"
       responses:
         204:
-          description: 'Success'
+          description: "Success"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
         404:
-          description: 'Error'
+          description: "Error"
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
 
   /categories:
     get:
-      summary: 'Fetch all categories from a user'
+      summary: "Fetch all categories from a user"
       tags:
         - categories
-      description: 'This endpoint allows user to fetch all his categories'
+      description: "This endpoint allows user to fetch all his categories"
       consumes:
-        - 'application/json'
+        - "application/json"
       produces:
-        - 'application/json'
+        - "application/json"
       responses:
         200:
-          description: 'success'
+          description: "success"
           schema:
-            $ref: '#/definitions/CategoriesResponse'
+            $ref: "#/definitions/CategoriesResponse"
         404:
-          description: 'Error'
+          description: "Error"
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
+    put:
+      summary: "Update a user category"
+      tags:
+        - categories
+      description: "This endpoint allows user to update a category"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            $ref: "#/definitions/CategoryPutRequest"
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/CategoriesResponse"
+        404:
+          description: "Error"
+          schema:
+            $ref: "#/definitions/Error"
+        422:
+          $ref: "#/responses/422"
 
 responses:
   400:
     description: Bad Request
     schema:
-      $ref: '#/definitions/Error'
+      $ref: "#/definitions/Error"
   401:
     description: Unauthorized
     schema:
-      $ref: '#/definitions/Error'
+      $ref: "#/definitions/Error"
   404:
     description: Not Found
     schema:
-      $ref: '#/definitions/Error'
+      $ref: "#/definitions/Error"
   422:
     description: Validation Error
     schema:
-      $ref: '#/definitions/ValidationError'
+      $ref: "#/definitions/ValidationError"
   500:
     description: Internal Server Error
     schema:
-      $ref: '#/definitions/Error'
+      $ref: "#/definitions/Error"
 
 definitions:
   ItemsLists:
-    type: 'object'
+    type: "object"
     required:
       - item_id
       - quantity
     properties:
       id:
-        type: 'integer'
+        type: "integer"
         example: 1
       quantity:
-        type: 'integer'
+        type: "integer"
         example: 3
 
   ItemsListsResponse:
-    type: 'object'
+    type: "object"
     properties:
       category:
-        type: 'string'
-        example: 'Banana'
+        type: "string"
+        example: "Banana"
       items:
-        type: 'array'
+        type: "array"
         items:
-          type: 'object'
+          type: "object"
           properties:
             id:
-              type: 'integer'
+              type: "integer"
               example: 1
             item_id:
-              type: 'integer'
+              type: "integer"
               example: 1
             list_id:
-              type: 'integer'
+              type: "integer"
               example: 1
             name:
-              type: 'string'
-              example: 'Banana'
+              type: "string"
+              example: "Banana"
             category_id:
-              type: 'integer'
+              type: "integer"
               example: 1
             categoryName:
-              type: 'string'
-              example: 'Category 1'
+              type: "string"
+              example: "Category 1"
 
   LoginRequest:
-    type: 'object'
+    type: "object"
     required:
       - email
       - password
     properties:
       email:
-        type: 'string'
-        example: 'username@email.com'
+        type: "string"
+        example: "username@email.com"
       password:
-        type: 'string'
-        example: 'secret'
+        type: "string"
+        example: "secret"
 
   LoginResponse:
-    type: 'object'
+    type: "object"
     properties:
       status:
-        type: 'string'
+        type: "string"
       data:
-        type: 'object'
+        type: "object"
         properties:
           user:
-            type: 'object'
+            type: "object"
             example:
               id: 1
-              email: 'email@example.com'
+              email: "email@example.com"
           token:
-            type: 'string'
-            example: 'dfjghjk34h5kjhdfkjdfgklj76l8k'
+            type: "string"
+            example: "dfjghjk34h5kjhdfkjdfgklj76l8k"
 
   ListResponse:
-    type: 'object'
+    type: "object"
     properties:
       id:
-        type: 'integer'
+        type: "integer"
       name:
-        type: 'string'
+        type: "string"
       status:
-        type: 'string'
+        type: "string"
       user_id:
-        type: 'integer'
+        type: "integer"
       created_at:
-        type: 'string'
+        type: "string"
       updated_at:
-        type: 'string'
+        type: "string"
 
   ItemPostRequest:
-    type: 'object'
+    type: "object"
     required:
       - name
       - category
     properties:
       name:
-        type: 'string'
-        example: 'Item name'
+        type: "string"
+        example: "Item name"
       category:
-        type: 'string'
-        example: 'Category1'
+        type: "string"
+        example: "Category1"
       note:
-        type: 'string'
-        example: 'Great description'
+        type: "string"
+        example: "Great description"
       image:
-        type: 'string'
-        example: 'https://image.com'
+        type: "string"
+        example: "https://image.com"
 
   ItemPutRequest:
-    type: 'object'
+    type: "object"
     properties:
       name:
-        type: 'string'
-        example: 'Item name'
+        type: "string"
+        example: "Item name"
       category:
-        type: 'string'
-        example: 'Category1'
+        type: "string"
+        example: "Category1"
       note:
-        type: 'string'
-        example: 'Great description'
+        type: "string"
+        example: "Great description"
       image:
-        type: 'string'
-        example: 'https://image.com'
+        type: "string"
+        example: "https://image.com"
 
   ItemResponse:
-    type: 'object'
+    type: "object"
     properties:
       id:
-        type: 'integer'
+        type: "integer"
       name:
-        type: 'string'
+        type: "string"
       category_id:
-        type: 'integer'
+        type: "integer"
       user_id:
-        type: 'integer'
+        type: "integer"
       note:
-        type: 'string'
+        type: "string"
       image:
-        type: 'string'
+        type: "string"
       created_at:
-        type: 'string'
+        type: "string"
       updated_at:
-        type: 'string'
+        type: "string"
+
+  CategoryPutRequest:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Item name"
 
   CategoriesResponse:
-    type: 'object'
+    type: "object"
     properties:
       status:
-        type: 'string'
-        example: 'success'
+        type: "string"
+        example: "success"
       data:
-        type: 'array'
+        type: "array"
         items:
-          type: 'object'
+          type: "object"
           properties:
             id:
-              type: 'integer'
+              type: "integer"
               example: 1
             name:
-              type: 'string'
-              example: 'Category'
+              type: "string"
+              example: "Category"
             user_id:
-              type: 'integer'
+              type: "integer"
               example: 1
             created_at:
-              type: 'string'
-              example: '2020-09-02T14:48:41.919Z'
+              type: "string"
+              example: "2020-09-02T14:48:41.919Z"
             updated_at:
-              type: 'string'
-              example: '2020-09-02T14:48:41.919Z'
+              type: "string"
+              example: "2020-09-02T14:48:41.919Z"
 
   Error:
-    type: 'object'
+    type: "object"
     properties:
       status:
-        type: 'string'
-        example: 'error'
+        type: "string"
+        example: "error"
       message:
-        type: 'string'
+        type: "string"
 
   ValidationError:
-    type: 'object'
+    type: "object"
     properties:
       status:
-        type: 'string'
-        example: 'error'
+        type: "string"
+        example: "error"
       field:
-        type: 'string'
+        type: "string"
       message:
-        type: 'string'
+        type: "string"

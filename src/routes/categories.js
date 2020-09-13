@@ -5,5 +5,6 @@ const jwt = require('../middlewares/jwt')
 const router = new Router()
 
 router.get('/categories', jwt, categoriesController.index)
+router.put('/categories/:id', jwt, categoriesController.update)
 
 module.exports = router
