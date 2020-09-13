@@ -68,10 +68,21 @@ describe('categories routes test', () => {
       })
 
     res.status.should.eql(422)
-    console.log(`res body`, res.body)
-    // const [newCategory] = await knex('categories')
-    //   .where('id', category.id)
-    //   .select('name')
-    // newCategory.name.should.equal('New name')
+  })
+
+  it('should throw validation error if the category name already exists', async () => {
+    const [user] = await createUser('admin@test.fr', 'password')
+    const [category] = await createCategory(user)
+
+    const res = await chai
+      .request(server)
+      .put(`/api/categories/${category.id}`)
+      .set('Authorization', 'Bearer ' + generateJWT(user))
+      .send({
+        name: category.name,
+      })
+
+    res.status.should.eql(422)
+    res.body.message.should.equal('You already have a category with this name')
   })
 })

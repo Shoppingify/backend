@@ -47,6 +47,21 @@ exports.update = async (ctx) => {
       return ctx
     }
 
+    //Check if the user has already a category with this name
+    const [categoryExists] = await knex('categories')
+      .where('user_id', ctx.state.user.id)
+      .andWhere('name', 'ILIKE', `%${name}%`)
+
+    if (categoryExists) {
+      ctx.status = 422
+      ctx.body = {
+        status: 'error',
+        field: 'name',
+        message: 'You already have a category with this name',
+      }
+      return ctx
+    }
+
     const [updatedCategory] = await knex('categories')
       .where('id', ctx.params.id)
       .andWhere('user_id', ctx.state.user.id)
