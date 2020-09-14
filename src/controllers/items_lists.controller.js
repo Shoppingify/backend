@@ -46,7 +46,8 @@ exports.index = async (ctx) => {
         'items_lists.quantity',
         'items.name',
         'items.category_id',
-        'categories.name as categoryName'
+        'categories.name as categoryName',
+        'categories.id as category_id'
       )
       .innerJoin('items', 'items.id', 'items_lists.item_id')
       .innerJoin('categories', 'categories.id', 'items.category_id')
@@ -261,6 +262,7 @@ const groupByCategories = (items) => {
   return items.reduce((acc, value) => {
     if (acc.length === 0) {
       acc.push({
+        category_id: value.category_id,
         category: value.categoryName,
         items: [].concat(value),
       })
@@ -272,6 +274,7 @@ const groupByCategories = (items) => {
         acc[index].items.push(value)
       } else {
         acc.push({
+          category_id: value.category_id,
           category: value.categoryName,
           items: [].concat(value),
         })
