@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs')
 const knex = require('../db/connection')
 const jsonwebtoken = require('jsonwebtoken')
 const { formatValidationErrors } = require('../utils/formatValidationErrors')
+const axios = require('axios')
 
 const authSchema = Joi.object().keys({
   email: Joi.string().email().required(),
@@ -130,6 +131,69 @@ exports.login = async (ctx) => {
         message: 'An error occured',
       }
     }
+  }
+}
+
+exports.githubOauth = async (ctx) => {
+  // I should get the code
+  // console.log('ctx from githubOauth', ctx.query.code)
+
+  const { code } = ctx.query
+
+  // Make a post request to get the user's infos
+  // https://github.com/login/oauth/access_token
+  try {
+    const tokenResponse = await axios.post(
+      'https://github.com/login/oauth/access_token',
+      {
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET,
+        code,
+      },
+      {
+        headers: {
+          Accept: 'application/json',
+        },
+      }
+    )
+    // console.log('Res from oauth', tokenResponse.data)
+    const { access_token } = tokenResponse.data
+
+    // Get the user's informations
+    const response = await axios.get('https://api.github.com/user', {
+      headers: {
+        Authorization: `token ${access_token}`,
+      },
+    })
+
+    // console.log('response', response.data)
+    const { id } = response.data
+
+    // Check if the user is already in the db
+    const [user] = await knex('users').where('github_id', id)
+    let newUser
+    if (!user) {
+      ;[newUser] = await knex('users')
+        .insert({
+          github_id: id,
+        })
+        .returning('*')
+    }
+
+    const token = jsonwebtoken.sign(
+      {
+        data: { id: user ? user.id : newUser.id },
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' } // 7 days
+      // { expiresIn: 60 }
+    )
+
+    // Need to save the user
+    ctx.redirect(`${process.env.FRONTEND_URL}?access_token=${token}`)
+  } catch (e) {
+    console.log('Error Github Oauth', e)
+    ctx.redirect(`${process.env.FRONTEND_URL}`)
   }
 }
 
