@@ -178,6 +178,15 @@ exports.githubOauth = async (ctx) => {
           github_id: id,
         })
         .returning('*')
+
+      try {
+        // Create a bunch of default Categories
+        await createDefaultCategoriesForUser(newUser)
+        await createDefaultActiveListForUser(newUser)
+        // Create a active default List
+      } catch (e) {
+        console.log('Error while inserting some default data', e)
+      }
     }
 
     const token = jsonwebtoken.sign(
