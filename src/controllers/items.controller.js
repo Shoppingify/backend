@@ -23,10 +23,7 @@ exports.index = async (ctx) => {
 
   try {
     const categories = await knex('categories')
-      .where({
-        user_id: null,
-      })
-      .orWhere({ user_id: ctx.state.user.id })
+      .where({ user_id: ctx.state.user.id })
       .select('*')
 
     const items = await knex('items')
