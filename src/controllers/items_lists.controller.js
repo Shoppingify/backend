@@ -36,19 +36,8 @@ exports.index = async (ctx) => {
     }
 
     // Fetch the items
-    const queryBuilder = await knex
+    const queryBuilder = knex
       .from('items_lists')
-      .select(
-        // 'items_lists.id',
-        'items_lists.item_id as id',
-        'items_lists.list_id',
-        'items_lists.done',
-        'items_lists.quantity',
-        'items.name',
-        'items.category_id',
-        'categories.name as categoryName',
-        'categories.id as category_id'
-      )
       .innerJoin('items', 'items.id', 'items_lists.item_id')
       .innerJoin('categories', 'categories.id', 'items.category_id')
       .where('list_id', list.id)
@@ -58,7 +47,17 @@ exports.index = async (ctx) => {
       queryBuilder.andWhere('items.deleted_at', null)
     }
 
-    const items = await queryBuilder
+    const items = await queryBuilder.select(
+      // 'items_lists.id',
+      'items_lists.item_id as id',
+      'items_lists.list_id',
+      'items_lists.done',
+      'items_lists.quantity',
+      'items.name',
+      'items.category_id',
+      'categories.name as categoryName',
+      'categories.id as category_id'
+    )
 
     const groupedByCategories = groupByCategories(items, 'categoryName')
     console.log(`Items from the route`, groupedByCategories)
