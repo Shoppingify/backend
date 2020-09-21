@@ -5,6 +5,7 @@ const {
   getRandomItemInArray,
   createItems,
   createList,
+  createCategory,
 } = require('./utils/utils')
 const { mtRand } = require('../utils/mtRand')
 
@@ -130,5 +131,28 @@ describe('Handle the items and list for a user', () => {
       .andWhere('list_id', itemInserted.list_id)
 
     itemsInTheList.length.should.equal(0)
+  })
+
+  it('should not be possible to add a deleted item to an active list', async () => {
+    const [user] = await createUser('admin@test.fr', 'password')
+    const [list] = await createList(user, 'list', 'active')
+    const [category] = await createCategory(user)
+    const [item] = await knex('items').returning('*').insert({
+      name: 'item',
+      user_id: user.id,
+      category_id: category.id,
+      deleted_at: knex.fn.now(),
+    })
+
+    const res = await chai
+      .request(server)
+      .post(`/api/lists/${list.id}/items`)
+      .set('Authorization', 'Bearer ' + generateJWT(user))
+      .send({
+        item_id: item.id,
+        list_id: list.id,
+      })
+
+    res.status.should.eql(400)
   })
 })

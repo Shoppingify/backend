@@ -36,7 +36,7 @@ exports.index = async (ctx) => {
     }
 
     // Fetch the items
-    const items = await knex
+    const queryBuilder = await knex
       .from('items_lists')
       .select(
         // 'items_lists.id',
@@ -52,6 +52,12 @@ exports.index = async (ctx) => {
       .innerJoin('items', 'items.id', 'items_lists.item_id')
       .innerJoin('categories', 'categories.id', 'items.category_id')
       .where('list_id', list.id)
+
+    if (list.status === 'active') {
+      queryBuilder.andWhere('items.deleted_at', null)
+    }
+
+    const items = await queryBuilder
 
     const groupedByCategories = groupByCategories(items, 'categoryName')
     console.log(`Items from the route`, groupedByCategories)
@@ -80,6 +86,7 @@ exports.create = async (ctx) => {
     const [item] = await knex('items')
       .where('id', item_id)
       .andWhere('user_id', ctx.state.user.id)
+      .andWhere('deleted_at', null)
 
     if (!list || !item) {
       ctx.status = 400
