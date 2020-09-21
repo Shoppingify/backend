@@ -54,6 +54,7 @@ exports.index = async (ctx) => {
       .where('list_id', list.id)
 
     if (list.status === 'active') {
+      queryBuilder.andWhere('categories.deleted_at', null)
       queryBuilder.andWhere('items.deleted_at', null)
     }
 
@@ -146,6 +147,7 @@ exports.update = async (ctx) => {
     const [item] = await knex('items')
       .where('id', item_id)
       .andWhere('user_id', ctx.state.user.id)
+      .andWhere('deleted_at', null)
 
     if (!list || !item) {
       ctx.status = 400
@@ -212,6 +214,7 @@ exports.delete = async (ctx) => {
     const [item] = await knex('items')
       .where('id', item_id)
       .andWhere('user_id', ctx.state.user.id)
+      .andWhere('deleted_at', null)
 
     if (!list || !item) {
       ctx.status = 400

@@ -24,6 +24,7 @@ exports.index = async (ctx) => {
   try {
     const categories = await knex('categories')
       .where({ user_id: ctx.state.user.id })
+      .andWhere('deleted_at', null)
       .select('*')
 
     const items = await knex('items')
@@ -75,9 +76,7 @@ exports.create = async (ctx) => {
 
     // Check if the category exists
     const cat = await knex('categories')
-      // .where("user_id", ctx.state.user.id)
-      // .orWhere("user_id", null)
-      .whereRaw('(user_id IS NULL OR user_id = ?)', [ctx.state.user.id])
+      .where('user_id', ctx.state.user.id)
       .andWhereRaw('LOWER(name) = ?', category.toLowerCase())
       .select('id', 'name')
 
@@ -153,6 +152,7 @@ exports.update = async (ctx) => {
     const item = await knex('items')
       .where('id', id)
       .andWhere('user_id', ctx.state.user.id)
+      .andWhere('deleted_at', null)
       .select('id')
     if (item.length !== 1) {
       ctx.status = 404
@@ -170,8 +170,7 @@ exports.update = async (ctx) => {
     // Check if the category exists
     const cat = await knex('categories')
       // .where("user_id", ctx.state.user.id)
-      // .orWhere("user_id", null)
-      .whereRaw('(user_id IS NULL OR user_id = ?)', [ctx.state.user.id])
+      .where('user_id', ctx.state.user.id)
       .andWhereRaw('LOWER(name) = ?', category.toLowerCase())
       .select('id', 'name')
 
