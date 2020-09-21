@@ -31,6 +31,7 @@ exports.index = async (ctx) => {
       .where({
         'items.user_id': ctx.state.user.id,
       })
+      .andWhere('items.deleted_at', null)
       .select('items.*', 'categories.name as categoryName')
 
     let results = []
@@ -249,7 +250,9 @@ exports.delete = async (ctx) => {
     await knex('items')
       .where('id', id)
       .andWhere('user_id', ctx.state.user.id)
-      .del()
+      .update({
+        deleted_at: knex.fn.now(),
+      })
 
     ctx.status = 204
   } catch (e) {
