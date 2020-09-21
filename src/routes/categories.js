@@ -6,5 +6,6 @@ const router = new Router()
 
 router.get('/categories', jwt, categoriesController.index)
 router.put('/categories/:id', jwt, categoriesController.update)
+router.delete('/categories/:id', jwt, categoriesController.delete)
 
 module.exports = router
