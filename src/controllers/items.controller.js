@@ -25,6 +25,7 @@ exports.index = async (ctx) => {
     const categories = await knex('categories')
       .where({ user_id: ctx.state.user.id })
       .andWhere('deleted_at', null)
+      .orderBy('name', 'ASC')
       .select('*')
 
     const items = await knex('items')
