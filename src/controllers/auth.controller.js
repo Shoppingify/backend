@@ -195,7 +195,6 @@ exports.githubOauth = async (ctx) => {
       },
       process.env.JWT_SECRET,
       { expiresIn: '7d' } // 7 days
-      // { expiresIn: 60 }
     )
 
     // Need to save the user
