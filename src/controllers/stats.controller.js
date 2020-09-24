@@ -3,10 +3,20 @@ const knex = require('../db/connection')
 
 exports.index = async (ctx) => {
   //Fetch the stats for a month
-  let itemsByMonth = await queryStats(ctx, 'items', 'monthly')
-  let categoriesByMonth = await queryStats(ctx, 'categories', 'monthly')
 
   const [{ total: monthlyTotal }] = await fetchTotal(ctx, 'monthly')
+  const [{ total: yearlyTotal }] = await fetchTotal(ctx, 'yearly')
+
+  console.log('monthlyTotal', monthlyTotal)
+  console.log('yearlyTotal', yearlyTotal)
+
+  if (!monthlyTotal && !yearlyTotal) {
+    ctx.status = 204
+    return ctx
+  }
+
+  let itemsByMonth = await queryStats(ctx, 'items', 'monthly')
+  let categoriesByMonth = await queryStats(ctx, 'categories', 'monthly')
 
   itemsByMonth = calcPercent(itemsByMonth, monthlyTotal)
   categoriesByMonth = calcPercent(categoriesByMonth, monthlyTotal)
@@ -16,8 +26,6 @@ exports.index = async (ctx) => {
   //Fetch the stats for a year
   let itemsByYear = await queryStats(ctx, 'items', 'yearly')
   let categoriesByYear = await queryStats(ctx, 'categories', 'yearly')
-
-  const [{ total: yearlyTotal }] = await fetchTotal(ctx, 'yearly')
 
   itemsByYear = calcPercent(itemsByYear, yearlyTotal)
   categoriesByYear = calcPercent(categoriesByYear, yearlyTotal)
