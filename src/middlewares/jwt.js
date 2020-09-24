@@ -8,7 +8,7 @@ const middleware = async function jwt(ctx, next) {
     //Try and decode the token asynchronously
     const decoded = await jsonwebtoken.verify(token, process.env.JWT_SECRET)
 
-    console.log(`Decoded`, decoded)
+    // console.log(`Decoded`, decoded)
 
     const [user] = await knex('users').where('id', decoded.data.id)
 

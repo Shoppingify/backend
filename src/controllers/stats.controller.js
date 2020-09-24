@@ -8,8 +8,8 @@ exports.index = async (ctx) => {
 
   const [{ total: monthlyTotal }] = await fetchTotal(ctx, 'monthly')
 
-  calcPercent(itemsByMonth, monthlyTotal)
-  calcPercent(categoriesByMonth, monthlyTotal)
+  itemsByMonth = calcPercent(itemsByMonth, monthlyTotal)
+  categoriesByMonth = calcPercent(categoriesByMonth, monthlyTotal)
 
   const quantityByDay = await quantityBy(ctx, 'day', 'monthly')
 
@@ -19,8 +19,8 @@ exports.index = async (ctx) => {
 
   const [{ total: yearlyTotal }] = await fetchTotal(ctx, 'yearly')
 
-  calcPercent(itemsByYear, yearlyTotal)
-  calcPercent(itemsByYear, yearlyTotal)
+  itemsByYear = calcPercent(itemsByYear, yearlyTotal)
+  categoriesByYear = calcPercent(categoriesByYear, yearlyTotal)
 
   const quantityByMonth = await quantityBy(ctx, 'month', 'yearly')
 
@@ -169,10 +169,12 @@ const fetchTotal = (ctx, interval) => {
  */
 const calcPercent = (data, total) => {
   return data.map((el) => {
-    const percent = Math.floor((el.quantity / total) * 100)
+    const percent = Math.floor(
+      (parseInt(el.quantity, 10) / parseInt(total, 10)) * 100
+    )
     return {
       name: el.name,
-      percent,
+      quantity: percent,
     }
   })
 }
