@@ -1,55 +1,49 @@
-const { queryBuilder } = require('../db/connection')
+const { QueryBuilder } = require('knex')
 const knex = require('../db/connection')
 
 exports.index = async (ctx) => {
-  // Should I use a queryParams to change from month to year?
+  //Fetch the stats for a month
+  let itemsByMonth = await queryStats(ctx, 'items', 'monthly')
+  let categoriesByMonth = await queryStats(ctx, 'categories', 'monthly')
 
-  const monthlyItems = await queryStats(ctx, 'items', 'monthly')
-  const monthlyCategories = await queryStats(ctx, 'categories', 'monthly')
+  const [{ total: monthlyTotal }] = await fetchTotal(ctx, 'monthly')
 
-  console.log('monthlyItems', monthlyItems)
-
-  const [monthlyTotal] = await knex('items_lists')
-    .innerJoin('items', 'items.id', 'items_lists.item_id')
-    .innerJoin('lists', 'lists.id', 'items_lists.list_id')
-    .where('lists.user_id', ctx.state.user.id)
-    .sum('items_lists.quantity as total')
-
-  const monthlyItemStats = monthlyItems.map((item) => {
-    const percent = Math.floor((item.quantity / monthlyTotal.total) * 100)
-    return {
-      name: item.name,
-      percent,
-    }
-  })
-
-  const monthlyCategoriesStats = monthlyCategories.map((cat) => {
-    const percent = Math.floor((cat.quantity / monthlyTotal.total) * 100)
-    return {
-      name: cat.name,
-      percent,
-    }
-  })
+  calcPercent(itemsByMonth, monthlyTotal)
+  calcPercent(categoriesByMonth, monthlyTotal)
 
   const quantityByDay = await quantityBy(ctx, 'day', 'monthly')
 
-  const quantityByMonth = await quantityBy(ctx, 'month', 'yearly')
+  //Fetch the stats for a year
+  let itemsByYear = await queryStats(ctx, 'items', 'yearly')
+  let categoriesByYear = await queryStats(ctx, 'categories', 'yearly')
 
-  console.log('montlyTotalItems', monthlyTotal)
+  const [{ total: yearlyTotal }] = await fetchTotal(ctx, 'yearly')
+
+  calcPercent(itemsByYear, yearlyTotal)
+  calcPercent(itemsByYear, yearlyTotal)
+
+  const quantityByMonth = await quantityBy(ctx, 'month', 'yearly')
 
   ctx.status = 200
   ctx.body = {
     status: 'success',
     data: {
-      monthlyItemStats,
-      monthlyCategoriesStats,
-      quantityByDay,
-      quantityByMonth,
+      month: {
+        itemsByMonth,
+        categoriesByMonth,
+        quantityByDay,
+      },
+      year: {
+        itemsByYear,
+        categoriesByYear,
+        quantityByMonth,
+      },
     },
   }
 }
 
 /**
+ * Fetch the most added items/categories for an interval
  * @params {Context} ctx
  * @param {string} type ('items', 'categories')
  * @param {string} interval ('monthly', 'yearly')
@@ -74,7 +68,6 @@ const queryStats = async (ctx, type, interval) => {
       .innerJoin('categories', 'categories.id', 'items.category_id')
       .where('categories.user_id', ctx.state.user.id)
   }
-  // return await knex('items_lists')
 
   if (interval === 'monthly') {
     queryBuilder.andWhereRaw(
@@ -99,10 +92,11 @@ const queryStats = async (ctx, type, interval) => {
 }
 
 /**
- *
+ * Fetch the quantity by Day or Month to create the data for the graph
  * @param {Context} ctx
  * @param {string} quantityBy (['day', 'month'])
  * @param {string} interval (['monthly', 'yearly'])
+ * @returns {QueryBuilder}
  */
 const quantityBy = async (ctx, quantityBy, interval) => {
   const currentDate = new Date()
@@ -132,6 +126,53 @@ const quantityBy = async (ctx, quantityBy, interval) => {
   }
 
   queryBuilder.groupBy('date')
-  console.log('querySql', queryBuilder.toSQL())
   return queryBuilder
+}
+
+/**
+ * Fetch the total of quantity in a given interval
+ * @param {Context} ctx
+ * @param {string} interval (['monthly', 'yearly'])
+ * @returns {QueryBuilder}
+ */
+const fetchTotal = (ctx, interval) => {
+  const currentDate = new Date()
+  const currentMonth = currentDate.getMonth() + 1
+  const currentYear = currentDate.getFullYear()
+
+  let queryBuilder = knex('items_lists')
+    .innerJoin('items', 'items.id', 'items_lists.item_id')
+    .innerJoin('lists', 'lists.id', 'items_lists.list_id')
+    .where('lists.user_id', ctx.state.user.id)
+
+  if (interval === 'monthly') {
+    queryBuilder.andWhereRaw(
+      `date_part('month', items_lists.created_at) >= ${currentMonth} AND date_part('month', items_lists.created_at) < ${
+        currentMonth + 1
+      }`
+    )
+  } else if (interval === 'yearly') {
+    queryBuilder.andWhereRaw(
+      `date_part('year', items_lists.created_at) >= ${currentYear} AND date_part('year', items_lists.created_at) < ${
+        currentYear + 1
+      }`
+    )
+  }
+  return queryBuilder.sum('items_lists.quantity as total')
+}
+
+/**
+ * Map through the data and transform the quantity in percentage
+ * @param {array} data
+ * @param {number} total
+ * @returns {array}
+ */
+const calcPercent = (data, total) => {
+  return data.map((el) => {
+    const percent = Math.floor((el.quantity / total) * 100)
+    return {
+      name: el.name,
+      percent,
+    }
+  })
 }
