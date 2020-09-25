@@ -55,6 +55,8 @@ exports.index = async (ctx) => {
       'items_lists.quantity',
       'items.name',
       'items.category_id',
+      'items.deleted_at',
+      'items.created_at',
       'categories.name as categoryName',
       'categories.id as category_id'
     )
