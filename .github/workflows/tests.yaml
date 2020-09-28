@@ -34,7 +34,7 @@ jobs:
           NODE_ENV: test
           PORT: 3000
           JWT_SECRET: test-secret
-          DB_HOST: postgres
+          DB_HOST: localhost
           DB_NAME: shoppingify
           DB_USER: postgres
           DB_PASSWORD: root
