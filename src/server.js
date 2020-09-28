@@ -21,17 +21,18 @@ const statsRoutes = require('./routes/stats')
 const app = new Koa()
 const router = new Router({ prefix: '/api' })
 
-// Setup morgan
-const accessLogStream = fs.createWriteStream(__dirname + '/logs/access.log', {
-  flags: 'a',
-})
-
 // create swagger document
 const swaggerDocument = swagger.loadDocumentSync(
   path.join(__dirname, 'documentation', 'api.yaml')
 )
 
-app.use(morgan('combined', { stream: accessLogStream }))
+if (process.env.NODE_ENV !== 'test') {
+  const accessLogStream = fs.createWriteStream(__dirname + '/logs/access.log', {
+    flags: 'a',
+  })
+  app.use(morgan('combined', { stream: accessLogStream }))
+}
+// Setup morgan
 
 // Errors handling
 app.use(async (ctx, next) => {
