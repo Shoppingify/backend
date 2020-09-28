@@ -35,10 +35,12 @@ jobs:
         with:
           node-version: "12.x"
       - run: npm install
-      - env:
+      - name: add env and migrate
+        env:
           DB_HOST: localhost
           DB_NAME: shoppingify
           DB_USER: postgres
           DB_PASSWORD: postgres
-      - run: npm run mg
-      - run: npm run test
+        run: npm run mg
+      - name: run tests
+        run: npm run test
