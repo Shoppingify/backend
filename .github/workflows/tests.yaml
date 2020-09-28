@@ -35,6 +35,6 @@ jobs:
           PORT: 3000
           JWT_SECRET: test-secret
           DB_HOST: localhost
-          DB_NAME: shoppingify
+          DB_NAME: postgres
           DB_USER: postgres
           DB_PASSWORD: root
