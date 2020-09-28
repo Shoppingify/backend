@@ -26,16 +26,13 @@ jobs:
       NODE_ENV: test
       PORT: 3000
       JWT_SECRET: test-secret
-      DB_HOST: postgres
-      DB_NAME: shoppingify
-      DB_USER: postgres
-      DB_PASSWORD: postgres
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/shoppingify
 
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: '12.x'
       - run: npm install
       - run: npm run mg
       - run: npm run test
