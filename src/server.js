@@ -3,7 +3,7 @@ const fs = require('fs')
 const morgan = require('koa-morgan')
 const swagger = require('swagger2')
 const { ui, validate } = require('swagger2-koa')
-console.log(`NODE_ENV`, process.env.NODE_ENV)
+
 require('dotenv').config({
   path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`),
 })
@@ -70,8 +70,6 @@ app.use(ui(swaggerDocument, '/swagger'))
 app.use(router.routes())
 app.use(router.allowedMethods())
 
-const server = app.listen(process.env.PORT, () => {
-  console.log(`Listening on port ${process.env.PORT}`)
-})
+const server = app.listen(process.env.PORT, () => {})
 
 module.exports = server

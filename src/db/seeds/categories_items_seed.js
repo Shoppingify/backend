@@ -53,7 +53,7 @@ exports.seed = async function (knex) {
 
         items.push(item)
 
-        // console.log(`Items`, items);
+        //
       }
     })
   })
@@ -66,7 +66,6 @@ exports.seed = async function (knex) {
     .first()
   const firstUserItems = await knex('items').where('user_id', firstUser.id)
 
-  console.log(``)
   let itemsToInsert = []
   for (let i = 0; i < mtRand(10, 15); i++) {
     itemsToInsert.push({

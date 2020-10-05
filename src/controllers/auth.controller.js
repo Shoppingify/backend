@@ -212,7 +212,6 @@ exports.me = async (ctx) => {
       .where({ id: ctx.state.user.id })
       .select(['id', 'email', 'created_at', 'updated_at'])
 
-    console.log(`User`, user)
     if (user.length !== 1) {
       ctx.status = 404
       ctx.body = {

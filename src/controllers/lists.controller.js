@@ -27,7 +27,7 @@ exports.index = async (ctx) => {
       })
     }
   }
-  console.log(`filters`, filters)
+
   // Fetch the lists
   try {
     const queryBuilder = knex('lists').where({
@@ -170,7 +170,6 @@ exports.update = async (ctx) => {
         },
         ['id', 'name', 'user_id']
       )
-    console.log(`Updated list`, updatedList)
 
     ctx.status = 200
     ctx.body = {

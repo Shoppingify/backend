@@ -68,8 +68,6 @@ exports.update = async (ctx) => {
       .andWhere('user_id', ctx.state.user.id)
       .update({ name }, ['*'])
 
-    console.log(`updatedCategory`, updatedCategory)
-
     ctx.status = 200
     ctx.body = {
       status: 'success',

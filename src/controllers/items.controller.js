@@ -245,7 +245,7 @@ exports.update = async (ctx) => {
 
 exports.delete = async (ctx) => {
   const { id } = ctx.params
-  // console.log(`id`, id);
+  //
   try {
     await knex('items')
       .where('id', id)
