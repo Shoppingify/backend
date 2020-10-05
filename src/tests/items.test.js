@@ -33,7 +33,6 @@ describe('Items routes test', () => {
     knex('users')
       .select(['id', 'email'])
       .then((users) => {
-        console.log(`User`, users[0])
         chai
           .request(server)
           .get('/api/items')
@@ -53,7 +52,6 @@ describe('Items routes test', () => {
     knex('users')
       .select(['id', 'email'])
       .then((users) => {
-        console.log(`User`, users[0])
         chai
           .request(server)
           .post('/api/items')
@@ -66,7 +64,7 @@ describe('Items routes test', () => {
             should.not.exist(err)
             res.status.should.equal(201)
             res.body.status.should.equal('success')
-            console.log(`data`, res.body.data)
+
             res.body.data.should.include.keys(
               'id',
               'name',
@@ -85,7 +83,6 @@ describe('Items routes test', () => {
     knex('users')
       .select(['id', 'email'])
       .then((users) => {
-        console.log(`User`, users[0])
         chai
           .request(server)
           .post('/api/items')
@@ -98,7 +95,7 @@ describe('Items routes test', () => {
             should.not.exist(err)
             res.status.should.equal(201)
             res.body.status.should.equal('success')
-            console.log(`data`, res.body.data)
+
             res.body.data.should.include.keys(
               'id',
               'name',
@@ -125,7 +122,6 @@ describe('Items routes test', () => {
     knex('users')
       .select(['id', 'email'])
       .then((users) => {
-        console.log(`User`, users[0])
         chai
           .request(server)
           .post('/api/items')
@@ -154,7 +150,6 @@ describe('Items routes test', () => {
             user_id: users[0].id,
           })
           .then((item) => {
-            console.log(`User`, users[0])
             chai
               .request(server)
               .put(`/api/items/${item[0].id}`)
@@ -175,7 +170,7 @@ describe('Items routes test', () => {
                   'user_id',
                   'category_id'
                 )
-                console.log(`Res body`, res.body)
+
                 knex('items')
                   .where('id', item[0].id)
                   .then((newItem) => {
@@ -199,7 +194,6 @@ describe('Items routes test', () => {
             user_id: users[0].id,
           })
           .then((item) => {
-            console.log(`User`, users[0])
             chai
               .request(server)
               .put(`/api/items/${item[0].id}`)
@@ -229,7 +223,7 @@ describe('Items routes test', () => {
             user_id: users[0].id,
           })
           .then((item) => {
-            // console.log(`Item`, item);
+            //
             chai
               .request(server)
               .delete(`/api/items/${item[0].id}`)

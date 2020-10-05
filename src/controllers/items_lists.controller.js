@@ -62,7 +62,7 @@ exports.index = async (ctx) => {
     )
 
     const groupedByCategories = groupByCategories(items, 'categoryName')
-    console.log(`Items from the route`, groupedByCategories)
+
     ctx.status = 200
     ctx.body = {
       status: 'success',
@@ -202,7 +202,6 @@ exports.update = async (ctx) => {
 }
 
 exports.delete = async (ctx) => {
-  console.log(`ctx request`, ctx.request.body)
   try {
     await itemDeleteSchema.validateAsync(ctx.request.body)
 
@@ -250,8 +249,6 @@ exports.delete = async (ctx) => {
       }
       return ctx
     }
-
-    console.log(`deleted rows`, rows)
 
     ctx.status = 204
   } catch (e) {

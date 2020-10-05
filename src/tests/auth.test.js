@@ -32,7 +32,7 @@ describe('User authentication', () => {
 
         res.status.should.equal(201)
         res.body.status.should.equal('success')
-        // console.log(`res.body`, res.body.data);
+        //
         res.body.data.user.email.should.equal(userData.email)
         done()
       })
@@ -109,7 +109,7 @@ describe('User authentication', () => {
       .end((err, res) => {
         should.not.exist(err)
         res.status.should.equal(422)
-        console.log(`res.body`, res.body)
+
         res.body.field.should.equal('password')
         res.body.message.should.equal('"password" is required')
         done()

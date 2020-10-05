@@ -82,7 +82,6 @@ exports.createItems = async (user) => {
 }
 
 exports.generateJWT = (user) => {
-  console.log(`user`, user)
   return jsonwebtoken.sign(
     {
       data: {
