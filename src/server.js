@@ -26,7 +26,7 @@ const swaggerDocument = swagger.loadDocumentSync(
   path.join(__dirname, 'documentation', 'api.yaml')
 )
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV === 'development') {
   const accessLogStream = fs.createWriteStream(__dirname + '/logs/access.log', {
     flags: 'a',
   })
