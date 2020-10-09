@@ -50,9 +50,6 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
       - run: npm install
       - name: Run production migration
         run: npm run mg:production
@@ -61,10 +58,5 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      - name: add git config
-        run: git config user.email "${{ secrets.GIT_CONFIG_EMAIL }}" && git config user.name "ips-coding-challenge" && git add -A && git commit -m "Updated code"
-      - uses: akhileshns/heroku-deploy@v3.5.7
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+      - name: "Push to Heroku"
+        run: git push -f https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git origin/master:master
