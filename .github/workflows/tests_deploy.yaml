@@ -1,5 +1,8 @@
 name: Run tests on pull request
 on:
+  push:
+    branches:
+      - master
   pull_request:
     types: [opened, synchronize]
 
