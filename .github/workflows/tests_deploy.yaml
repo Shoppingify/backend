@@ -40,3 +40,23 @@ jobs:
           DB_NAME: postgres
           DB_USER: postgres
           DB_PASSWORD: root
+  
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master' # Only deploy master
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - name: Run production migration
+        run: npm run mg:production
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      - uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
