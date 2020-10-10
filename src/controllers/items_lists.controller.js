@@ -48,12 +48,13 @@ exports.index = async (ctx) => {
     }
 
     const items = await queryBuilder.select(
-      // 'items_lists.id',
       'items_lists.item_id as id',
       'items_lists.list_id',
       'items_lists.done',
       'items_lists.quantity',
       'items.name',
+      'items.image',
+      'items.note',
       'items.category_id',
       'items.deleted_at',
       'items.created_at',
