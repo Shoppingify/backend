@@ -52,7 +52,7 @@ app.on('error', (err, ctx) => {
 
 app.use(
   cors({
-    origin: '*',
+    origin: process.env.FRONTEND_URL,
   })
 )
 
