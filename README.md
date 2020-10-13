@@ -1,6 +1,6 @@
 # Shoppingify Challenge - Backend
 
-## Demo here : https://shoppingify.netlify.app/
+## Demo here : https://shoppingify.netlify.app/ ( The backend is deployed on Heroku so it could take some time to wake up )
 
 - You can use "demo@test.fr" / "password" to test it out.
 
