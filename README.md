@@ -1,19 +1,11 @@
 # Shoppingify Challenge - Backend
 
-## Endpoints
+## Demo here : https://shoppingify.netlify.app/
 
-### Auth
+- You can use "demo@test.fr" / "password" to test it out.
 
-- /api/register -> register a user
-- /api/login -> login a user
+## Frontend repo : https://github.com/Shoppingify/frontend ( React + Typescript )
 
-### Lists [Need Authorization token] {"Authorization": "Bearer " + token}
+If you're interested taking the challenge, it's over there: https://devchallenges.io/challenges/mGd5VpbO4JnzU6I9l96x
 
-- /api/lists [GET] -> Fetch the user's list
-- /api/lists [POST] -> create a list
-
-### Api Documentation is accessible on localhost:3000/swagger
-
-1. Run npm install
-2. Add .env variables ( Check in the discord )
-3. Run "npm run build" or "npm run dev-remote" to use the remote db if you don't want to setup a db locally
+![shoppingify challenge](https://firebasestorage.googleapis.com/v0/b/devchallenges-1234.appspot.com/o/challengesDesigns%2FShoppingifyThumbnail.png?alt=media&token=e577059f-3b93-4f50-92d6-cedeed68403e)
