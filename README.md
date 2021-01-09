@@ -63,4 +63,4 @@ Visit http://localhost:3000/swagger to see the doc and check which operations yo
 I don't remember if the documentation is complete. So check the controllers to see what
 you can do ;).
 
-Have fun!
+Have fun and if you encounter some difficulties, feel free to contact me on twitter ;).
