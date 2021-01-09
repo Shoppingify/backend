@@ -26,14 +26,6 @@ const swaggerDocument = swagger.loadDocumentSync(
   path.join(__dirname, 'documentation', 'api.yaml')
 )
 
-if (process.env.NODE_ENV === 'development') {
-  const accessLogStream = fs.createWriteStream(__dirname + '/logs/access.log', {
-    flags: 'a',
-  })
-  app.use(morgan('combined', { stream: accessLogStream }))
-}
-// Setup morgan
-
 // Errors handling
 app.use(async (ctx, next) => {
   try {
@@ -70,6 +62,10 @@ app.use(ui(swaggerDocument, '/swagger'))
 app.use(router.routes())
 app.use(router.allowedMethods())
 
-const server = app.listen(process.env.PORT, () => {})
+const PORT = process.env.PORT || 3000
+
+const server = app.listen(PORT, () => {
+  console.log(`Listening on Port ${PORT}`)
+})
 
 module.exports = server

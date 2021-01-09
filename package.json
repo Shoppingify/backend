@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/server.js",
-  "engines": {
-    "node": "12.x"
-  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon src/server.js",
     "dev-remote": "cross-env NODE_ENV=production nodemon src/server.js",
@@ -30,7 +27,7 @@
     "@hapi/joi": "^17.1.1",
     "@koa/cors": "^3.1.0",
     "@koa/router": "^9.4.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "knex": "^0.21.5",
@@ -49,7 +46,6 @@
     "cross-env": "^7.0.2",
     "faker": "^5.1.0",
     "mocha": "^8.1.2",
-    "nodemon": "^2.0.4",
-    "sqlite3": "^5.0.0"
+    "nodemon": "^2.0.4"
   }
 }
